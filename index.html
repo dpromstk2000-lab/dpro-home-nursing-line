@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#0e5a5a">
+    <meta name="description" content="DPRO 訪問看護ステーション LINEの新規相談・紹介受付画面です。">
+    <title>新規相談・LINE連携｜DPRO 訪問看護ステーション LINE</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="config.js" defer></script>
+    <script src="https://static.line-scdn.net/liff/edge/2/sdk.js" defer></script>
+    <script src="api.js" defer></script>
+    <script src="app.js" defer></script>
+  </head>
+  <body>
+    <a class="skip-link" href="#main">本文へ移動</a>
+    <div class="app-shell">
+      <header class="topbar">
+        <div class="topbar__inner">
+          <a class="brand" href="index.html" aria-label="相談受付トップ">
+            <span class="brand__mark" aria-hidden="true">看</span>
+            <span class="brand__text">
+              <span class="brand__eyebrow">DPRO HOME NURSING</span>
+              <span class="brand__name" data-system-name>DPRO 訪問看護ステーション LINE</span>
+            </span>
+          </a>
+          <div class="topbar__actions">
+            <span class="demo-badge" data-demo-only>デモ環境</span>
+            <span class="role-badge">相談窓口</span>
+            <button class="nav-toggle" type="button" data-nav-toggle aria-expanded="false">
+              メニュー
+            </button>
+          </div>
+        </div>
+        <nav class="global-nav" data-global-nav aria-label="画面一覧">
+          <div class="global-nav__inner">
+            <a href="index.html" data-nav-link>相談・連携</a>
+            <a href="member.html" data-nav-link>本人・家族</a>
+            <a href="staff.html" data-nav-link>スタッフ</a>
+            <a href="owner.html" data-nav-link>管理者PC</a>
+            <a href="owner-ipad.html" data-nav-link>管理者iPad</a>
+            <a href="system-check.html" data-nav-link>システム検査</a>
+          </div>
+        </nav>
+      </header>
+
+      <main class="page page--narrow" id="main">
+        <aside class="emergency-banner" aria-label="緊急時の案内">
+          <span class="emergency-banner__icon" aria-hidden="true">☎</span>
+          <div>
+            <strong>緊急の症状・連絡はLINEに入力しないでください</strong>
+            <span data-emergency-message>
+              緊急時の連絡にはLINEを使用せず、事業所の緊急連絡先または119へ電話してください。
+            </span>
+          </div>
+        </aside>
+
+        <section class="hero">
+          <div class="hero__content">
+            <p class="eyebrow">訪問看護を、もっと安心して利用するために</p>
+            <h1>新規相談と、利用中の方のLINE連携</h1>
+            <p class="lead">
+              初めてのご相談、ご家族からのご相談、病院・ケアマネジャーからのご紹介を受け付けます。
+              利用中の方は、事業所の承認後に訪問予定や完了報告を確認できます。
+            </p>
+            <div class="hero__actions">
+              <a class="btn btn--primary" href="#consultation">新規相談を入力する</a>
+              <a class="btn btn--secondary" href="#line-link">利用中の方のLINE連携</a>
+            </div>
+          </div>
+        </section>
+
+        <section class="section" aria-labelledby="available-heading">
+          <div class="section-heading">
+            <div>
+              <p class="eyebrow">できること</p>
+              <h2 id="available-heading">LINEで迷わず連絡できます</h2>
+            </div>
+          </div>
+          <div class="grid grid--3">
+            <article class="card">
+              <span class="card__icon" aria-hidden="true">相</span>
+              <h3>新規相談</h3>
+              <p>本人・家族・病院・ケアマネジャーからの相談内容を事業所へ送れます。</p>
+            </article>
+            <article class="card">
+              <span class="card__icon" aria-hidden="true">予</span>
+              <h3>訪問予定の確認</h3>
+              <p>連携承認後は、次回の訪問予定と担当職種を本人・家族ページで確認できます。</p>
+            </article>
+            <article class="card">
+              <span class="card__icon" aria-hidden="true">連</span>
+              <h3>変更・相談の連絡</h3>
+              <p>予定変更や折り返し希望を送信できます。予定は事業所確認後に確定します。</p>
+            </article>
+          </div>
+        </section>
+
+        <section class="section form-card" id="consultation" aria-labelledby="consultation-heading">
+          <p class="eyebrow">初めての方・紹介元の方</p>
+          <h2 id="consultation-heading">新規相談・紹介受付</h2>
+          <p class="lead">
+            詳しい病名や医療情報は入力せず、まずは連絡に必要な内容だけをお知らせください。
+          </p>
+          <form class="form-grid section" data-api-form data-consultation-form>
+            <div class="field">
+              <label for="consultant-name">
+                相談者氏名<span class="field__required">必須</span>
+              </label>
+              <input id="consultant-name" name="consultant_name" type="text" autocomplete="name" required>
+            </div>
+            <div class="field">
+              <label for="consultant-phone">
+                電話番号<span class="field__required">必須</span>
+              </label>
+              <input
+                id="consultant-phone"
+                name="consultant_phone"
+                type="tel"
+                inputmode="tel"
+                autocomplete="tel"
+                placeholder="090-1234-5678"
+                required
+              >
+              <p class="field__hint">ハイフンあり・なし、全角、+81形式にも対応予定です。</p>
+            </div>
+            <div class="field">
+              <label for="relationship">利用者との関係</label>
+              <select id="relationship" name="relationship">
+                <option value="">選択してください</option>
+                <option value="本人">本人</option>
+                <option value="家族・親族">家族・親族</option>
+                <option value="後見人・支援者">後見人・支援者</option>
+                <option value="病院・診療所">病院・診療所</option>
+                <option value="ケアマネジャー">ケアマネジャー</option>
+                <option value="その他">その他</option>
+              </select>
+            </div>
+            <div class="field">
+              <label for="consultation-type">相談種別</label>
+              <select id="consultation-type" name="consultation_type">
+                <option value="new_service">新規利用の相談</option>
+                <option value="discharge_support">退院後の訪問看護</option>
+                <option value="medical_coordination">訪問リハビリの相談</option>
+                <option value="availability">対応地域・空き状況</option>
+                <option value="other">その他</option>
+              </select>
+            </div>
+            <div class="field field--full">
+              <label for="consultation-summary">相談概要</label>
+              <textarea
+                id="consultation-summary"
+                name="consultation_summary"
+                placeholder="例：退院予定のため、訪問看護の利用について相談したい"
+              ></textarea>
+              <p class="field__hint">
+                緊急症状、詳しい病歴、保険証番号、マイナンバーは入力しないでください。
+              </p>
+            </div>
+            <div class="field field--full">
+              <button class="btn btn--primary" type="submit" data-submit-button>
+                相談を送信する
+              </button>
+              <div class="form-status" data-consultation-status role="status" aria-live="polite" hidden></div>
+            </div>
+          </form>
+        </section>
+
+        <section class="section form-card" id="line-link" aria-labelledby="line-link-heading">
+          <p class="eyebrow">現在利用中の方</p>
+          <h2 id="line-link-heading">本人・家族ページの連携申請</h2>
+          <p class="lead">
+            申請後、事業所が本人・家族関係を確認します。承認前に利用者情報は表示されません。
+          </p>
+          <form class="form-grid section" data-api-form data-line-link-form>
+            <div class="field">
+              <label for="member-number">利用者番号</label>
+              <input
+                id="member-number"
+                name="member_number"
+                type="text"
+                inputmode="text"
+                autocomplete="off"
+                placeholder="例：HN-0001"
+                required
+              >
+            </div>
+            <div class="field">
+              <label for="member-phone">事業所へ登録した電話番号</label>
+              <input
+                id="member-phone"
+                name="member_phone"
+                type="tel"
+                inputmode="tel"
+                autocomplete="tel"
+                required
+              >
+            </div>
+            <div class="field field--full">
+              <label for="link-relationship">申請者と利用者の関係</label>
+              <select id="link-relationship" name="link_relationship">
+                <option value="patient">本人</option>
+                <option value="contact">家族・親族</option>
+                <option value="contact">後見人・支援者</option>
+              </select>
+            </div>
+            <div class="field field--full">
+              <button class="btn btn--primary" type="submit" data-submit-button>
+                LINE連携を申請する
+              </button>
+              <div class="form-status" data-line-link-status role="status" aria-live="polite" hidden></div>
+            </div>
+          </form>
+        </section>
+
+        <section class="section note">
+          <strong>このシステムの範囲</strong>
+          <p data-scope-notice>
+            本システムは訪問予定・現場連携・家族連絡を支援するもので、電子カルテ・正式な訪問看護記録・保険請求を置き換えるものではありません。
+          </p>
+        </section>
+      </main>
+
+      <footer class="footer">
+        <p><span data-office-name>DPRO訪問看護ステーション（デモ）</span></p>
+        <p>Version <span data-version>NURSING-1</span></p>
+      </footer>
+    </div>
+    <div class="toast" data-toast role="status" aria-live="polite"></div>
+  </body>
+</html>

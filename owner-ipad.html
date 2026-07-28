@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#0e5a5a">
+    <meta name="description" content="DPRO 訪問看護ステーション LINEの管理者iPad画面です。">
+    <title>管理者iPad｜DPRO 訪問看護ステーション LINE</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="config.js" defer></script>
+    <script src="app.js" defer></script>
+  </head>
+  <body>
+    <a class="skip-link" href="#main">本文へ移動</a>
+    <div class="app-shell">
+      <header class="topbar">
+        <div class="topbar__inner">
+          <a class="brand" href="owner-ipad.html" aria-label="管理者iPadトップ">
+            <span class="brand__mark" aria-hidden="true">看</span>
+            <span class="brand__text">
+              <span class="brand__eyebrow">DPRO HOME NURSING</span>
+              <span class="brand__name" data-system-name>DPRO 訪問看護ステーション LINE</span>
+            </span>
+          </a>
+          <div class="topbar__actions">
+            <span class="demo-badge" data-demo-only>デモ環境</span>
+            <span class="role-badge">管理者iPad</span>
+            <button class="nav-toggle" type="button" data-nav-toggle aria-expanded="false">
+              メニュー
+            </button>
+          </div>
+        </div>
+        <nav class="global-nav" data-global-nav aria-label="画面一覧">
+          <div class="global-nav__inner">
+            <a href="index.html" data-nav-link>相談・連携</a>
+            <a href="member.html" data-nav-link>本人・家族</a>
+            <a href="staff.html" data-nav-link>スタッフ</a>
+            <a href="owner.html" data-nav-link>管理者PC</a>
+            <a href="owner-ipad.html" data-nav-link>管理者iPad</a>
+            <a href="system-check.html" data-nav-link>システム検査</a>
+          </div>
+        </nav>
+      </header>
+
+      <main class="page" id="main">
+        <section class="hero">
+          <div class="hero__content">
+            <p class="eyebrow" data-current-date>2026年7月27日</p>
+            <h1>本日の運営・承認</h1>
+            <p class="lead">
+              iPadで当日の未配置、訪問状況、変更依頼、家族報告承認を大きなボタンで操作できます。
+            </p>
+          </div>
+        </section>
+
+        <div class="section">
+          <div class="tablet-tabs" data-panel-group role="tablist" aria-label="iPad機能">
+            <button type="button" role="tab" aria-selected="true" data-panel-target="today-ipad-panel">
+              本日の訪問
+            </button>
+            <button type="button" role="tab" aria-selected="false" data-panel-target="change-ipad-panel">
+              変更依頼
+            </button>
+            <button type="button" role="tab" aria-selected="false" data-panel-target="approval-ipad-panel">
+              承認
+            </button>
+            <button type="button" role="tab" aria-selected="false" data-panel-target="alert-ipad-panel">
+              要確認
+            </button>
+          </div>
+
+          <section class="panel is-active" id="today-ipad-panel" data-panel role="tabpanel">
+            <div class="grid grid--4">
+              <article class="metric">
+                <p class="metric__label">本日</p>
+                <p class="metric__value">18</p>
+                <p class="metric__detail">全訪問</p>
+              </article>
+              <article class="metric metric--danger">
+                <p class="metric__label">未配置</p>
+                <p class="metric__value">2</p>
+                <p class="metric__detail">至急確認</p>
+              </article>
+              <article class="metric metric--warning">
+                <p class="metric__label">訪問中</p>
+                <p class="metric__value">2</p>
+                <p class="metric__detail">開始済み</p>
+              </article>
+              <article class="metric">
+                <p class="metric__label">完了</p>
+                <p class="metric__value">9</p>
+                <p class="metric__detail">報告待ち 1</p>
+              </article>
+            </div>
+            <ul class="visit-list section">
+              <li class="visit-card">
+                <div class="visit-card__time">15:00</div>
+                <div>
+                  <h3>井上 次郎様</h3>
+                  <p class="visit-card__meta">看護師・60分・担当未配置</p>
+                </div>
+                <div class="visit-card__actions">
+                  <span class="status status--alert">未配置</span>
+                  <button class="btn btn--danger" type="button" data-preview-action>スタッフを配置</button>
+                </div>
+              </li>
+              <li class="visit-card">
+                <div class="visit-card__time">15:30</div>
+                <div>
+                  <h3>高橋 正様</h3>
+                  <p class="visit-card__meta">佐藤看護師・60分・移動余裕30分</p>
+                </div>
+                <div class="visit-card__actions">
+                  <span class="status status--scheduled">配置済み</span>
+                  <button class="btn btn--secondary" type="button" data-preview-action>詳細</button>
+                </div>
+              </li>
+            </ul>
+          </section>
+
+          <section class="panel" id="change-ipad-panel" data-panel role="tabpanel" hidden>
+            <div class="grid grid--2">
+              <article class="notice-card">
+                <span class="status status--alert">未回答</span>
+                <h2 class="section">7月29日の時間変更希望</h2>
+                <p>山田 花子様ご家族・10:00から午後への変更相談</p>
+                <div class="button-row">
+                  <button class="btn btn--primary" type="button" data-preview-action>代替日時を確認</button>
+                </div>
+              </article>
+              <article class="notice-card">
+                <span class="status status--progress">確認中</span>
+                <h2 class="section">8月1日の欠席希望</h2>
+                <p>鈴木 洋子様ご本人・訪問リハビリ</p>
+                <div class="button-row">
+                  <button class="btn btn--secondary" type="button" data-preview-action>内容を確認</button>
+                </div>
+              </article>
+            </div>
+          </section>
+
+          <section class="panel" id="approval-ipad-panel" data-panel role="tabpanel" hidden>
+            <div class="grid grid--2">
+              <article class="notice-card">
+                <span class="status status--progress">家族報告</span>
+                <h2 class="section">山田 花子様</h2>
+                <p>予定どおり訪問が完了しました。次回は7月29日10時です。</p>
+                <div class="button-row">
+                  <button class="btn btn--primary" type="button" data-preview-action>確認して承認</button>
+                  <button class="btn btn--secondary" type="button" data-preview-action>修正を依頼</button>
+                </div>
+              </article>
+              <article class="notice-card">
+                <span class="status status--progress">LINE連携</span>
+                <h2 class="section">高橋 正様のご家族</h2>
+                <p>申請者：高橋 美咲様・続柄：長女</p>
+                <div class="button-row">
+                  <button class="btn btn--primary" type="button" data-preview-action>関係を確認</button>
+                </div>
+              </article>
+            </div>
+          </section>
+
+          <section class="panel" id="alert-ipad-panel" data-panel role="tabpanel" hidden>
+            <div class="grid grid--2">
+              <article class="notice-card">
+                <span class="status status--alert">状態変化</span>
+                <h2 class="section">スタッフ報告の確認</h2>
+                <p>内部申し送りを確認し、事業所の連絡手順に従って対応してください。</p>
+                <div class="button-row">
+                  <button class="btn btn--danger" type="button" data-preview-action>最優先で確認</button>
+                </div>
+              </article>
+              <article class="notice-card">
+                <span class="status status--alert">期限まで7日</span>
+                <h2 class="section">指示書期限</h2>
+                <p>田中 一郎様の指示書期限を確認してください。原本はDPROに保存しません。</p>
+                <div class="button-row">
+                  <button class="btn btn--secondary" type="button" data-preview-action>対応記録</button>
+                </div>
+              </article>
+            </div>
+          </section>
+        </div>
+      </main>
+
+      <footer class="footer">
+        <p><span data-office-name>DPRO訪問看護ステーション（デモ）</span></p>
+        <p>Version <span data-version>NURSING-1</span></p>
+      </footer>
+    </div>
+    <div class="toast" data-toast role="status" aria-live="polite"></div>
+  </body>
+</html>

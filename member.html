@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#0e5a5a">
+    <meta name="description" content="DPRO 訪問看護ステーション LINEの本人・家族ポータルです。">
+    <title>本人・家族ページ｜DPRO 訪問看護ステーション LINE</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="config.js" defer></script>
+    <script src="https://static.line-scdn.net/liff/edge/2/sdk.js" defer></script>
+    <script src="api.js" defer></script>
+    <script src="app.js" defer></script>
+  </head>
+  <body>
+    <a class="skip-link" href="#main">本文へ移動</a>
+    <div class="app-shell">
+      <header class="topbar">
+        <div class="topbar__inner">
+          <a class="brand" href="member.html" aria-label="本人・家族ページトップ">
+            <span class="brand__mark" aria-hidden="true">看</span>
+            <span class="brand__text">
+              <span class="brand__eyebrow">DPRO HOME NURSING</span>
+              <span class="brand__name" data-system-name>DPRO 訪問看護ステーション LINE</span>
+            </span>
+          </a>
+          <div class="topbar__actions">
+            <span class="demo-badge" data-demo-only>デモ環境</span>
+            <span class="role-badge">本人・家族</span>
+            <button class="nav-toggle" type="button" data-nav-toggle aria-expanded="false">
+              メニュー
+            </button>
+          </div>
+        </div>
+        <nav class="global-nav" data-global-nav aria-label="画面一覧">
+          <div class="global-nav__inner">
+            <a href="index.html" data-nav-link>相談・連携</a>
+            <a href="member.html" data-nav-link>本人・家族</a>
+            <a href="staff.html" data-nav-link>スタッフ</a>
+            <a href="owner.html" data-nav-link>管理者PC</a>
+            <a href="owner-ipad.html" data-nav-link>管理者iPad</a>
+            <a href="system-check.html" data-nav-link>システム検査</a>
+          </div>
+        </nav>
+      </header>
+
+      <main class="page" id="main">
+        <aside class="emergency-banner" aria-label="緊急時の案内">
+          <span class="emergency-banner__icon" aria-hidden="true">☎</span>
+          <div>
+            <strong>緊急の症状・連絡はLINEに入力しないでください</strong>
+            <span data-emergency-message>
+              緊急時の連絡にはLINEを使用せず、事業所の緊急連絡先または119へ電話してください。
+            </span>
+          </div>
+        </aside>
+
+        <section class="hero">
+          <div class="hero__content">
+            <p class="eyebrow" data-current-date>2026年7月27日</p>
+            <h1 data-member-heading>本人・家族ページ</h1>
+            <p class="lead">
+              連携承認されたご本人・ご家族だけが確認できます。予定変更は送信時点では確定せず、事業所からの回答後に確定します。
+            </p>
+            <div class="hero__actions">
+              <a class="btn btn--primary" href="#next-visits">次回訪問を見る</a>
+              <a class="btn btn--secondary" href="#contact-request">変更・相談を送る</a>
+            </div>
+          </div>
+        </section>
+
+        <section class="section" aria-labelledby="member-auth-heading">
+          <div
+            class="form-status form-status--info"
+            data-member-auth-state
+            id="member-auth-heading"
+            role="status"
+            aria-live="polite"
+          >
+            LINE認証と連携承認の状態を確認しています。
+          </div>
+        </section>
+
+        <section class="section" id="next-visits" aria-labelledby="next-visits-heading">
+          <div class="section-heading">
+            <div>
+              <p class="eyebrow">訪問予定</p>
+              <h2 id="next-visits-heading">次回から3件</h2>
+            </div>
+            <span class="status status--progress" data-member-link-status>確認中</span>
+          </div>
+          <ul class="visit-list" data-member-visits>
+            <li class="empty-state">
+              <strong>連携情報を確認中です</strong>
+              承認済みのLINEアカウントだけに訪問予定を表示します。
+            </li>
+          </ul>
+        </section>
+
+        <section class="section" aria-labelledby="family-report-heading">
+          <div class="section-heading">
+            <div>
+              <p class="eyebrow">公開済み情報のみ</p>
+              <h2 id="family-report-heading">訪問完了報告</h2>
+            </div>
+          </div>
+          <div class="grid grid--2" data-member-reports>
+            <div class="empty-state">
+              <strong>報告を確認中です</strong>
+              管理者が家族公開を承認した報告だけを表示します。
+            </div>
+          </div>
+        </section>
+
+        <section class="section form-card" id="contact-request" aria-labelledby="contact-heading">
+          <p class="eyebrow">非緊急のご連絡</p>
+          <h2 id="contact-heading">予定変更・欠席・折り返し希望</h2>
+          <p class="lead">
+            送信後、事業所が内容を確認します。こちらから送信しただけでは訪問予定は変更されません。
+          </p>
+          <form class="form-grid section" data-api-form data-member-contact-form>
+            <div class="field">
+              <label for="request-kind">連絡内容</label>
+              <select id="request-kind" name="request_kind">
+                <option value="schedule_change">訪問日時の変更希望</option>
+                <option value="absence">今回の訪問を休みたい</option>
+                <option value="callback">事業所から電話がほしい</option>
+                <option value="non_urgent_consultation">その他の相談</option>
+              </select>
+            </div>
+            <div class="field">
+              <label for="callback-window">連絡希望時間</label>
+              <select id="callback-window" name="callback_window">
+                <option value="いつでもよい">いつでもよい</option>
+                <option value="午前">午前</option>
+                <option value="午後">午後</option>
+                <option value="17時以降">17時以降</option>
+              </select>
+            </div>
+            <div class="field field--full">
+              <label for="request-message">伝えたい内容</label>
+              <textarea
+                id="request-message"
+                name="request_message"
+                placeholder="例：7月29日の訪問時間について相談したい"
+              ></textarea>
+            </div>
+            <div class="field field--full">
+              <button class="btn btn--primary" type="submit" data-submit-button disabled>
+                事業所へ送信する
+              </button>
+              <div class="form-status" data-member-contact-status role="status" aria-live="polite" hidden></div>
+            </div>
+          </form>
+        </section>
+
+        <section class="section note">
+          <strong>表示される情報について</strong>
+          <p>
+            このページには管理者が家族公開を承認した内容だけが表示されます。スタッフの内部申し送りや正式な看護記録は表示されません。
+          </p>
+        </section>
+      </main>
+
+      <footer class="footer">
+        <p><span data-office-name>DPRO訪問看護ステーション（デモ）</span></p>
+        <p>Version <span data-version>NURSING-1</span></p>
+      </footer>
+    </div>
+    <div class="toast" data-toast role="status" aria-live="polite"></div>
+  </body>
+</html>

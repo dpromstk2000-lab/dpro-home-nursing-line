@@ -3,7 +3,7 @@
 window.DPRO_CONFIG = Object.freeze({
   systemName: "DPRO 訪問看護ステーション LINE",
   systemCode: "NURSING",
-  version: "NURSING-4-LINE-LINK-20260728",
+  version: "NURSING-4-LINE-LINK-20260729",
   timeZone: "Asia/Tokyo",
   environment: "demo",
   demoMode: true,
@@ -11,7 +11,7 @@ window.DPRO_CONFIG = Object.freeze({
   officeCode: "dpro_home_nursing_demo",
   officeName: "DPRO訪問看護ステーション（デモ）",
   apiBaseUrl: "https://dpro-home-nursing-line-api.dpromstk2000.workers.dev",
-  liffId: "",
+  liffId: "2010876527-hXoFHt3R",
   emergencyPhone: "",
   emergencyMessage:
     "緊急時の連絡にはLINEを使用せず、事業所の緊急連絡先または119へ電話してください。",

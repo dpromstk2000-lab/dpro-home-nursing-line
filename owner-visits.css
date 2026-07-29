@@ -1,0 +1,183 @@
+[data-visit-patient-summary][hidden],
+[data-admin-visit-list][hidden] {
+  display: none !important;
+}
+
+.owner-visit-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: end;
+  justify-content: space-between;
+  gap: 14px;
+}
+
+.owner-visit-toolbar .field {
+  min-width: min(100%, 260px);
+}
+
+.owner-visit-form-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.owner-visit-form-grid .field--full {
+  grid-column: 1 / -1;
+}
+
+.owner-visit-staff-options {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.owner-visit-staff-option {
+  display: flex;
+  min-height: 54px;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 12px;
+  border: 1px solid var(--nursing-border);
+  border-radius: var(--nursing-radius-sm);
+  background: var(--nursing-white);
+}
+
+.owner-visit-staff-option input {
+  width: 20px;
+  height: 20px;
+  flex: 0 0 20px;
+}
+
+.owner-visit-staff-option strong,
+.owner-visit-staff-option small {
+  display: block;
+}
+
+.owner-visit-staff-option small {
+  color: var(--nursing-muted);
+}
+
+.owner-visit-list {
+  display: grid;
+  gap: 12px;
+}
+
+.owner-visit-card {
+  display: grid;
+  grid-template-columns: 92px minmax(0, 1fr) auto;
+  gap: 16px;
+  align-items: center;
+  padding: 16px;
+  border: 1px solid var(--nursing-border);
+  border-radius: var(--nursing-radius-sm);
+  background: var(--nursing-white);
+}
+
+.owner-visit-card__time {
+  color: var(--nursing-navy);
+  font-size: 1.08rem;
+  font-weight: 900;
+}
+
+.owner-visit-card__meta {
+  margin-top: 5px;
+  color: var(--nursing-muted);
+  font-size: 0.9rem;
+}
+
+.owner-visit-card__staff {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 8px;
+}
+
+.owner-visit-staff-chip {
+  display: inline-flex;
+  min-height: 28px;
+  align-items: center;
+  padding: 4px 9px;
+  border-radius: 999px;
+  color: var(--nursing-teal-dark);
+  background: var(--nursing-teal-soft);
+  font-size: 0.8rem;
+  font-weight: 800;
+}
+
+.owner-visit-card__side {
+  display: grid;
+  justify-items: end;
+  gap: 8px;
+}
+
+.owner-visit-selected-patient {
+  padding: 14px;
+  border: 1px solid var(--nursing-success);
+  border-radius: var(--nursing-radius-sm);
+  background: var(--nursing-success-soft);
+}
+
+.owner-visit-selected-patient strong {
+  display: block;
+  color: var(--nursing-navy);
+}
+
+.owner-visit-help {
+  display: grid;
+  gap: 8px;
+}
+
+.owner-visit-help ol {
+  margin: 0;
+  padding-left: 1.4em;
+}
+
+.owner-visit-help li + li {
+  margin-top: 4px;
+}
+
+@media (max-width: 980px) {
+  .owner-visit-form-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 720px) {
+  .owner-visit-form-grid,
+  .owner-visit-staff-options {
+    grid-template-columns: 1fr;
+  }
+
+  .owner-visit-card {
+    grid-template-columns: 1fr;
+  }
+
+  .owner-visit-card__side {
+    justify-items: start;
+  }
+}
+
+
+.owner-demo-patient-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 14px 16px;
+  border: 1px solid var(--nursing-border);
+  border-radius: var(--nursing-radius-sm);
+  background: var(--nursing-teal-soft);
+}
+
+.owner-demo-patient-row p {
+  margin-top: 4px;
+  color: var(--nursing-muted);
+  font-size: 0.9rem;
+}
+
+@media (max-width: 720px) {
+  .owner-demo-patient-row {
+    align-items: stretch;
+    flex-direction: column;
+  }
+}

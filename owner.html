@@ -8,10 +8,12 @@
     <title>管理者PC｜DPRO 訪問看護ステーション LINE</title>
     <link rel="stylesheet" href="styles.css">
     <link rel="stylesheet" href="owner.css">
+    <link rel="stylesheet" href="owner-visits.css">
     <script src="config.js" defer></script>
     <script src="api.js" defer></script>
     <script src="app.js" defer></script>
     <script src="owner.js" defer></script>
+    <script src="owner-visits.js" defer></script>
   </head>
   <body>
     <a class="skip-link" href="#main">本文へ移動</a>
@@ -49,7 +51,7 @@
             <p class="eyebrow" data-current-date>本日</p>
             <h1>訪問看護・管理ダッシュボード</h1>
             <p class="lead">
-              実データの件数確認、スタッフ登録、アクセスコード発行、LINE連携承認を管理します。
+              実データの件数確認、訪問予定登録、スタッフ配置、アクセスコード発行、LINE連携承認を管理します。
               アクセスコードは発行後に再表示できないため、本人へ安全に伝えてください。
             </p>
           </div>
@@ -105,6 +107,7 @@
           <div class="management-layout section">
             <div class="side-menu" data-panel-group role="tablist" aria-label="管理機能">
               <button type="button" role="tab" aria-selected="true" data-panel-target="dashboard-panel">ダッシュボード</button>
+              <button type="button" role="tab" aria-selected="false" data-panel-target="visits-panel">訪問予定・配置</button>
               <button type="button" role="tab" aria-selected="false" data-panel-target="staff-panel">スタッフ管理</button>
               <button type="button" role="tab" aria-selected="false" data-panel-target="approval-panel">LINE連携承認</button>
               <button type="button" role="tab" aria-selected="false" data-panel-target="patient-panel">利用者検索</button>
@@ -171,6 +174,182 @@
                     この画面の件数はWorkerを通してSupabaseから取得します。未接続時に架空の患者名や件数は表示しません。
                   </p>
                 </article>
+              </section>
+
+
+              <section class="panel" id="visits-panel" data-panel role="tabpanel" hidden>
+                <div class="section-heading">
+                  <div>
+                    <p class="eyebrow">30分単位・重複検査付き</p>
+                    <h2>訪問予定登録・スタッフ配置</h2>
+                  </div>
+                  <a class="btn btn--secondary btn--small" href="staff.html" target="_blank" rel="noopener">
+                    スタッフ画面を開く
+                  </a>
+                </div>
+
+                <div class="form-status form-status--info" data-visit-master-status role="status" aria-live="polite">
+                  利用者とスタッフを取得しています。
+                </div>
+
+                <div class="owner-demo-patient-row section" data-demo-only>
+                  <div>
+                    <strong>検査用の利用者がない場合</strong>
+                    <p>デモ環境に限り、訪問予定の通し検査に使用する利用者を1名準備します。</p>
+                  </div>
+                  <button class="btn btn--secondary btn--small" type="button" data-prepare-demo-patient>
+                    デモ利用者を準備
+                  </button>
+                </div>
+
+                <article class="form-card section">
+                  <p class="eyebrow">新しい訪問予定</p>
+                  <h3>利用者・日時・担当者を指定する</h3>
+                  <form class="owner-visit-form-grid section" data-visit-create-form>
+                    <div class="field field--full">
+                      <label for="visit-patient-select">利用者</label>
+                      <select id="visit-patient-select" name="patient_id" data-visit-patient-select required>
+                        <option value="">利用者を取得しています</option>
+                      </select>
+                      <div class="owner-visit-selected-patient section" data-visit-patient-summary hidden></div>
+                    </div>
+
+                    <div class="field">
+                      <label for="visit-scheduled-date">訪問日</label>
+                      <div class="owner-date-control">
+                        <input
+                          id="visit-scheduled-date"
+                          name="scheduled_date"
+                          type="date"
+                          data-visit-date
+                          required
+                        >
+                      </div>
+                    </div>
+
+                    <div class="field">
+                      <label for="visit-start-time">開始時刻</label>
+                      <select id="visit-start-time" name="start_time" data-visit-time required></select>
+                      <p class="field__hint">開始時刻は30分単位です。</p>
+                    </div>
+
+                    <div class="field">
+                      <label for="visit-duration">訪問時間</label>
+                      <select id="visit-duration" name="duration_minutes" required>
+                        <option value="30">30分</option>
+                        <option value="60" selected>60分</option>
+                        <option value="90">90分</option>
+                        <option value="120">120分</option>
+                      </select>
+                    </div>
+
+                    <div class="field">
+                      <label for="visit-kind">訪問種別</label>
+                      <select id="visit-kind" name="visit_kind" required>
+                        <option value="regular">定期訪問</option>
+                        <option value="rehabilitation">訪問リハビリ</option>
+                        <option value="urgent">緊急訪問</option>
+                        <option value="temporary">臨時訪問</option>
+                        <option value="other">その他</option>
+                      </select>
+                    </div>
+
+                    <div class="field">
+                      <label for="visit-insurance">保険区分</label>
+                      <select id="visit-insurance" name="insurance_category" required>
+                        <option value="undecided">未確定</option>
+                        <option value="medical">医療保険</option>
+                        <option value="long_term_care">介護保険</option>
+                        <option value="private">自費</option>
+                      </select>
+                    </div>
+
+                    <div class="field">
+                      <label for="visit-minimum-staff">必要人数</label>
+                      <select id="visit-minimum-staff" name="minimum_staff_count" required>
+                        <option value="1">1名</option>
+                        <option value="2">2名</option>
+                        <option value="3">3名</option>
+                      </select>
+                    </div>
+
+                    <div class="field">
+                      <label for="visit-travel-before">訪問前の移動余裕</label>
+                      <select id="visit-travel-before" name="travel_before_minutes">
+                        <option value="0">なし</option>
+                        <option value="15" selected>15分</option>
+                        <option value="30">30分</option>
+                        <option value="45">45分</option>
+                        <option value="60">60分</option>
+                      </select>
+                    </div>
+
+                    <div class="field">
+                      <label for="visit-travel-after">訪問後の移動余裕</label>
+                      <select id="visit-travel-after" name="travel_after_minutes">
+                        <option value="0">なし</option>
+                        <option value="15" selected>15分</option>
+                        <option value="30">30分</option>
+                        <option value="45">45分</option>
+                        <option value="60">60分</option>
+                      </select>
+                    </div>
+
+                    <div class="field field--full">
+                      <span class="field__label">担当スタッフ</span>
+                      <div class="owner-visit-staff-options" data-visit-staff-options>
+                        <div class="empty-state">
+                          <strong>スタッフを取得しています</strong>
+                          在籍中のスタッフから選択します。
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="field field--full">
+                      <button class="btn btn--primary" type="submit" data-visit-create-button>
+                        訪問予定とスタッフ配置を登録する
+                      </button>
+                      <div class="form-status" data-visit-create-status role="status" aria-live="polite" hidden></div>
+                    </div>
+                  </form>
+                </article>
+
+                <section class="section" aria-labelledby="admin-visits-list-heading">
+                  <div class="owner-visit-toolbar">
+                    <div>
+                      <p class="eyebrow">登録済み実データ</p>
+                      <h3 id="admin-visits-list-heading">訪問予定一覧</h3>
+                    </div>
+                    <div class="button-row">
+                      <div class="field">
+                        <label for="visit-list-date">表示日</label>
+                        <div class="owner-date-control">
+                          <input id="visit-list-date" type="date" data-visit-list-date>
+                        </div>
+                      </div>
+                      <button class="btn btn--secondary btn--small" type="button" data-visit-refresh>
+                        一覧更新
+                      </button>
+                      <span class="status status--progress" data-visit-list-badge>取得待ち</span>
+                    </div>
+                  </div>
+
+                  <div class="form-status form-status--info section" data-visit-list-status role="status" aria-live="polite">
+                    訪問予定を取得しています。
+                  </div>
+
+                  <div class="owner-visit-list section" data-admin-visit-list hidden></div>
+                </section>
+
+                <aside class="note note--warning section owner-visit-help">
+                  <strong>NURSING-7 実地検査の流れ</strong>
+                  <ol>
+                    <li>利用者がない場合は「デモ利用者を準備」を押します。</li>
+                    <li>利用者と担当スタッフ「デモ管理者」を選び、現在より後の30分単位の時刻で登録します。</li>
+                    <li>スタッフ画面を開いて「最新情報へ更新」を押します。</li>
+                    <li>登録した訪問で「訪問開始」、続けて「訪問終了」を確認します。</li>
+                  </ol>
+                </aside>
               </section>
 
               <section class="panel" id="staff-panel" data-panel role="tabpanel" hidden>

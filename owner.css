@@ -160,3 +160,21 @@
     grid-template-columns: 1fr;
   }
 }
+
+
+.owner-date-control {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid var(--nursing-border);
+  border-radius: var(--nursing-radius-sm);
+  background: var(--nursing-white);
+}
+
+.owner-date-control input {
+  display: block;
+  width: 100%;
+  min-width: 0;
+  padding: 0;
+  border: 0;
+  background: transparent;
+}

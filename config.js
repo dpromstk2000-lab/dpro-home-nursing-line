@@ -3,7 +3,7 @@
 window.DPRO_CONFIG = Object.freeze({
   systemName: "DPRO 訪問看護ステーション LINE",
   systemCode: "NURSING",
-  version: "NURSING-6-OWNER-STAFF-ADMIN-20260729",
+  version: "NURSING-6-R2-STAFF-LOGIN-HIDE-20260729",
   timeZone: "Asia/Tokyo",
   environment: "demo",
   demoMode: true,

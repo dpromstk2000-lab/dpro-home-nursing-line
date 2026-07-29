@@ -13,6 +13,8 @@
   gap: 10px;
 }
 
+/* NURSING-6-R2: 認証後のログインフォームを確実に非表示 */
+[data-staff-login-view][hidden],
 .staff-app[hidden],
 [data-staff-work-forms][hidden],
 [data-selected-visit-section][hidden] {

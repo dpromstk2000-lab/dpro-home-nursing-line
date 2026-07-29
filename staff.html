@@ -4,11 +4,17 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="theme-color" content="#0e5a5a">
-    <meta name="description" content="DPRO 訪問看護ステーション LINEのスタッフ用スマートフォン画面です。">
+    <meta
+      name="description"
+      content="DPRO 訪問看護ステーション LINEのスタッフ用スマートフォン画面です。"
+    >
     <title>スタッフ本日の訪問｜DPRO 訪問看護ステーション LINE</title>
     <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="staff.css">
     <script src="config.js" defer></script>
+    <script src="api.js" defer></script>
     <script src="app.js" defer></script>
+    <script src="staff.js" defer></script>
   </head>
   <body>
     <a class="skip-link" href="#main">本文へ移動</a>
@@ -19,13 +25,20 @@
             <span class="brand__mark" aria-hidden="true">看</span>
             <span class="brand__text">
               <span class="brand__eyebrow">DPRO HOME NURSING</span>
-              <span class="brand__name" data-system-name>DPRO 訪問看護ステーション LINE</span>
+              <span class="brand__name" data-system-name>
+                DPRO 訪問看護ステーション LINE
+              </span>
             </span>
           </a>
           <div class="topbar__actions">
             <span class="demo-badge" data-demo-only>デモ環境</span>
             <span class="role-badge">スタッフ</span>
-            <button class="nav-toggle" type="button" data-nav-toggle aria-expanded="false">
+            <button
+              class="nav-toggle"
+              type="button"
+              data-nav-toggle
+              aria-expanded="false"
+            >
               メニュー
             </button>
           </div>
@@ -43,182 +56,352 @@
       </header>
 
       <main class="page" id="main">
+        <aside class="emergency-banner" aria-label="緊急時の案内">
+          <span class="emergency-banner__icon" aria-hidden="true">☎</span>
+          <div>
+            <strong>状態変化・緊急時は、この画面への入力だけで完了しません</strong>
+            <span data-emergency-message>
+              緊急時の連絡にはLINEを使用せず、事業所の緊急連絡先または119へ電話してください。
+            </span>
+          </div>
+        </aside>
+
         <section class="hero">
           <div class="hero__content">
-            <p class="eyebrow" data-current-date>2026年7月27日</p>
-            <h1>佐藤看護師・本日の担当訪問</h1>
+            <p class="eyebrow" data-current-date>本日</p>
+            <h1 data-staff-heading>スタッフ・本日の担当訪問</h1>
             <p class="lead">
-              担当として割り当てられた訪問だけを表示します。正式な訪問看護記録は、事業所指定の記録システムへ登録してください。
+              ログインしたスタッフに割り当てられた本日の訪問だけを表示します。
+              正式な訪問看護記録は、事業所指定の記録システムへ登録してください。
             </p>
           </div>
         </section>
 
-        <section class="section grid grid--4" aria-label="本日の状況">
-          <article class="metric">
-            <p class="metric__label">本日の担当</p>
-            <p class="metric__value">5件</p>
-            <p class="metric__detail">うち複数名訪問 1件</p>
-          </article>
-          <article class="metric">
-            <p class="metric__label">完了</p>
-            <p class="metric__value">2件</p>
-            <p class="metric__detail">終了時刻登録済み</p>
-          </article>
-          <article class="metric metric--warning">
-            <p class="metric__label">対応中</p>
-            <p class="metric__value">1件</p>
-            <p class="metric__detail">開始 13:58</p>
-          </article>
-          <article class="metric">
-            <p class="metric__label">これから</p>
-            <p class="metric__value">2件</p>
-            <p class="metric__detail">次回 15:30</p>
-          </article>
-        </section>
+        <section
+          class="section staff-login-wrap"
+          data-staff-login-view
+          aria-labelledby="staff-login-heading"
+        >
+          <article class="form-card staff-login-card">
+            <p class="eyebrow">スタッフ認証</p>
+            <h2 id="staff-login-heading">スタッフコードでログイン</h2>
+            <p class="lead">
+              事業所から発行されたスタッフコードとアクセスコードを入力してください。
+              認証情報は、この端末の現在のタブ内だけに保存されます。
+            </p>
 
-        <section class="section" aria-labelledby="staff-visits-heading">
-          <div class="section-heading">
-            <div>
-              <p class="eyebrow">時間順</p>
-              <h2 id="staff-visits-heading">本日の訪問一覧</h2>
-            </div>
-          </div>
-          <ul class="visit-list">
-            <li class="visit-card">
-              <div class="visit-card__time">9:00</div>
-              <div>
-                <h3>田中 一郎様</h3>
-                <p class="visit-card__meta"><strong>訪問完了</strong>・実績 9:01～9:58・定期訪問</p>
-              </div>
-              <div class="visit-card__actions">
-                <span class="status status--done">完了</span>
-                <button class="btn btn--secondary btn--small" type="button" data-preview-action>
-                  内容確認
-                </button>
-              </div>
-            </li>
-            <li class="visit-card">
-              <div class="visit-card__time">11:00</div>
-              <div>
-                <h3>鈴木 洋子様</h3>
-                <p class="visit-card__meta"><strong>訪問完了</strong>・実績 10:58～11:40・訪問リハビリ</p>
-              </div>
-              <div class="visit-card__actions">
-                <span class="status status--done">完了</span>
-                <button class="btn btn--secondary btn--small" type="button" data-preview-action>
-                  内容確認
-                </button>
-              </div>
-            </li>
-            <li class="visit-card">
-              <div class="visit-card__time">14:00</div>
-              <div>
-                <h3>山田 花子様</h3>
-                <p class="visit-card__meta"><strong>訪問中</strong>・開始 13:58・複数名訪問</p>
-              </div>
-              <div class="visit-card__actions">
-                <span class="status status--progress">訪問中</span>
-                <button
-                  class="btn btn--primary btn--small"
-                  type="button"
-                  data-preview-action
-                  data-preview-message="訪問終了の登録処理はNURSING-7で接続します。"
+            <form class="form-grid section" data-staff-login-form>
+              <div class="field">
+                <label for="staff-code">スタッフコード</label>
+                <input
+                  id="staff-code"
+                  name="staff_code"
+                  autocomplete="username"
+                  maxlength="64"
+                  placeholder="例：NURSE-01"
+                  required
                 >
-                  訪問終了
-                </button>
               </div>
-            </li>
-            <li class="visit-card">
-              <div class="visit-card__time">15:30</div>
-              <div>
-                <h3>高橋 正様</h3>
-                <p class="visit-card__meta"><strong>予定</strong>・60分・移動余裕 30分</p>
-              </div>
-              <div class="visit-card__actions">
-                <span class="status status--scheduled">予定</span>
-                <button
-                  class="btn btn--primary btn--small"
-                  type="button"
-                  data-preview-action
-                  data-preview-message="訪問開始の登録処理はNURSING-7で接続します。"
-                >
-                  訪問開始
-                </button>
-              </div>
-            </li>
-          </ul>
-        </section>
-
-        <section class="section grid grid--2">
-          <article class="form-card">
-            <p class="eyebrow">訪問終了後</p>
-            <h2>簡易業務報告</h2>
-            <form class="form-grid section" data-preview-form>
-              <div class="field field--full">
-                <span class="field__label">状態変化</span>
-                <div class="choice-grid">
-                  <label class="choice">
-                    <input type="radio" name="condition_change" value="none" checked>
-                    変化なし
-                  </label>
-                  <label class="choice">
-                    <input type="radio" name="condition_change" value="check">
-                    管理者確認が必要
-                  </label>
+              <div class="field">
+                <label for="staff-access-code">アクセスコード</label>
+                <div class="input-with-action">
+                  <input
+                    id="staff-access-code"
+                    name="access_code"
+                    type="password"
+                    autocomplete="current-password"
+                    minlength="4"
+                    maxlength="128"
+                    placeholder="事業所から発行されたコード"
+                    required
+                  >
+                  <button
+                    class="btn btn--secondary btn--small"
+                    type="button"
+                    data-toggle-access-code
+                    aria-pressed="false"
+                  >
+                    表示
+                  </button>
                 </div>
               </div>
               <div class="field field--full">
-                <label for="handoff">内部申し送り</label>
-                <textarea
-                  id="handoff"
-                  name="handoff"
-                  placeholder="家族には表示されない、事業所内の申し送り"
-                ></textarea>
+                <label for="staff-device-label">端末名</label>
+                <input
+                  id="staff-device-label"
+                  name="device_label"
+                  maxlength="100"
+                  placeholder="例：佐藤看護師 iPhone"
+                >
               </div>
               <div class="field field--full">
-                <button class="btn btn--primary" type="submit">内部報告を保存する</button>
-              </div>
-            </form>
-          </article>
-
-          <article class="form-card">
-            <p class="eyebrow">管理者承認後に公開</p>
-            <h2>家族向け報告案</h2>
-            <form class="form-grid section" data-preview-form>
-              <div class="field field--full">
-                <label for="family-report-template">報告テンプレート</label>
-                <select id="family-report-template" name="family_report_template">
-                  <option>予定どおり訪問が完了しました</option>
-                  <option>次回予定とお知らせがあります</option>
-                  <option>事業所から折り返しご連絡します</option>
-                </select>
-              </div>
-              <div class="field field--full">
-                <label for="family-report">家族へ公開する文章</label>
-                <textarea
-                  id="family-report"
-                  name="family_report"
-                  placeholder="病名や詳細な看護記録を記載しない家族向け文章"
-                ></textarea>
-              </div>
-              <div class="field field--full">
-                <button class="btn btn--primary" type="submit">承認待ちとして保存する</button>
+                <button
+                  class="btn btn--primary"
+                  type="submit"
+                  data-staff-login-button
+                >
+                  本日の訪問を開く
+                </button>
+                <div
+                  class="form-status"
+                  data-staff-login-status
+                  role="status"
+                  aria-live="polite"
+                  hidden
+                ></div>
               </div>
             </form>
           </article>
         </section>
 
+        <div class="staff-app" data-staff-app hidden>
+          <section class="section staff-session-bar" aria-label="ログイン状態">
+            <div>
+              <span class="status status--done">認証済み</span>
+              <strong data-staff-session-name>スタッフ</strong>
+              <span class="staff-session-role" data-staff-session-role></span>
+            </div>
+            <div class="button-row">
+              <button
+                class="btn btn--secondary btn--small"
+                type="button"
+                data-staff-refresh
+              >
+                最新情報へ更新
+              </button>
+              <button
+                class="btn btn--danger btn--small"
+                type="button"
+                data-staff-logout
+              >
+                ログアウト
+              </button>
+            </div>
+          </section>
+
+          <section class="section grid grid--4" aria-label="本日の状況">
+            <article class="metric">
+              <p class="metric__label">本日の担当</p>
+              <p class="metric__value" data-staff-total>0件</p>
+              <p class="metric__detail" data-staff-date>本日</p>
+            </article>
+            <article class="metric">
+              <p class="metric__label">完了</p>
+              <p class="metric__value" data-staff-completed>0件</p>
+              <p class="metric__detail">終了時刻登録済み</p>
+            </article>
+            <article class="metric metric--warning">
+              <p class="metric__label">訪問中</p>
+              <p class="metric__value" data-staff-progress>0件</p>
+              <p class="metric__detail">開始時刻登録済み</p>
+            </article>
+            <article class="metric">
+              <p class="metric__label">これから</p>
+              <p class="metric__value" data-staff-upcoming>0件</p>
+              <p class="metric__detail" data-staff-next-time>次回予定なし</p>
+            </article>
+          </section>
+
+          <section class="section" aria-labelledby="staff-visits-heading">
+            <div class="section-heading">
+              <div>
+                <p class="eyebrow">時間順・本人の割当のみ</p>
+                <h2 id="staff-visits-heading">本日の訪問一覧</h2>
+              </div>
+              <span class="status status--progress" data-staff-load-badge>
+                読込中
+              </span>
+            </div>
+            <div
+              class="form-status form-status--info"
+              data-staff-page-status
+              role="status"
+              aria-live="polite"
+            >
+              本日の訪問を取得しています。
+            </div>
+            <ul class="visit-list section" data-staff-visits>
+              <li class="empty-state">
+                <strong>本日の訪問を確認しています</strong>
+                ログインしたスタッフの割当だけを表示します。
+              </li>
+            </ul>
+          </section>
+
+          <section
+            class="section staff-selected-card"
+            data-selected-visit-section
+            aria-labelledby="selected-visit-heading"
+            hidden
+          >
+            <div class="section-heading">
+              <div>
+                <p class="eyebrow">選択中の訪問</p>
+                <h2 id="selected-visit-heading" data-selected-patient>
+                  利用者を選択してください
+                </h2>
+              </div>
+              <span class="status status--scheduled" data-selected-status>
+                予定
+              </span>
+            </div>
+
+            <div class="staff-detail-grid">
+              <article class="notice-card">
+                <h3>訪問情報</h3>
+                <dl class="staff-detail-list">
+                  <div>
+                    <dt>予定時間</dt>
+                    <dd data-selected-planned>－</dd>
+                  </div>
+                  <div>
+                    <dt>訪問種別</dt>
+                    <dd data-selected-kind>－</dd>
+                  </div>
+                  <div>
+                    <dt>利用者番号</dt>
+                    <dd data-selected-number>－</dd>
+                  </div>
+                  <div>
+                    <dt>訪問先</dt>
+                    <dd data-selected-address>－</dd>
+                  </div>
+                </dl>
+              </article>
+
+              <article class="notice-card">
+                <h3>訪問前の確認</h3>
+                <dl class="staff-detail-list">
+                  <div>
+                    <dt>住所補足</dt>
+                    <dd data-selected-address-note>特記事項なし</dd>
+                  </div>
+                  <div>
+                    <dt>訪問時の注意</dt>
+                    <dd data-selected-precautions>特記事項なし</dd>
+                  </div>
+                </dl>
+              </article>
+            </div>
+
+            <article class="notice-card section">
+              <h3>未完了の内部申し送り</h3>
+              <ul class="plain-list staff-handoff-list" data-selected-handoffs>
+                <li>未完了の申し送りはありません。</li>
+              </ul>
+            </article>
+          </section>
+
+          <section
+            class="section grid grid--2"
+            data-staff-work-forms
+            hidden
+          >
+            <article class="form-card">
+              <p class="eyebrow">事業所内だけに保存</p>
+              <h2>状態変化・内部申し送り</h2>
+              <p>
+                状態変化がある場合だけ、必要最小限の内容を登録してください。
+                緊急連絡や正式な看護記録の代わりにはなりません。
+              </p>
+              <form class="form-grid section" data-condition-form>
+                <div class="field field--full">
+                  <label for="condition-note">内部申し送り</label>
+                  <textarea
+                    id="condition-note"
+                    name="internal_note"
+                    maxlength="500"
+                    placeholder="例：訪問時に状態変化あり。管理者へ電話連絡済み。"
+                    required
+                  ></textarea>
+                  <small>500文字以内・家族ページには表示されません。</small>
+                </div>
+                <div class="field field--full">
+                  <button
+                    class="btn btn--primary"
+                    type="submit"
+                    data-condition-submit
+                  >
+                    状態変化を記録する
+                  </button>
+                  <div
+                    class="form-status"
+                    data-condition-status
+                    role="status"
+                    aria-live="polite"
+                    hidden
+                  ></div>
+                </div>
+              </form>
+            </article>
+
+            <article class="form-card">
+              <p class="eyebrow">管理者承認後に家族へ公開</p>
+              <h2>家族向け報告案</h2>
+              <p>
+                病名・詳細な看護記録・内部申し送りは記載せず、
+                家族へ伝えてよい簡潔な文章だけを入力してください。
+              </p>
+              <form class="form-grid section" data-family-report-form>
+                <div class="field field--full">
+                  <label for="family-report-template">テンプレート</label>
+                  <select id="family-report-template" data-family-template>
+                    <option value="">文章を選択してください</option>
+                    <option value="予定どおり訪問が完了しました。">
+                      予定どおり訪問が完了しました
+                    </option>
+                    <option value="本日の訪問が完了しました。次回も予定どおり伺います。">
+                      訪問完了・次回予定
+                    </option>
+                    <option value="本日の訪問が完了しました。事業所から別途ご連絡します。">
+                      事業所から折り返し
+                    </option>
+                  </select>
+                </div>
+                <div class="field field--full">
+                  <label for="family-report">家族へ公開する文章</label>
+                  <textarea
+                    id="family-report"
+                    name="report_text"
+                    maxlength="2000"
+                    placeholder="管理者が確認し、承認した後に公開されます。"
+                    required
+                  ></textarea>
+                  <small>送信直後は「承認待ち」で、家族にはまだ公開されません。</small>
+                </div>
+                <div class="field field--full">
+                  <button
+                    class="btn btn--primary"
+                    type="submit"
+                    data-family-report-submit
+                  >
+                    承認待ちとして保存する
+                  </button>
+                  <div
+                    class="form-status"
+                    data-family-report-status
+                    role="status"
+                    aria-live="polite"
+                    hidden
+                  ></div>
+                </div>
+              </form>
+            </article>
+          </section>
+        </div>
+
         <section class="section note note--warning">
-          <strong>状態変化・緊急時</strong>
+          <strong>安全上の重要事項</strong>
           <p>
-            この画面への入力だけで対応を完了せず、事業所の手順に従って管理者・主治医・緊急連絡先へ連絡してください。
+            状態変化・緊急時は、この画面への入力だけで対応を完了せず、
+            事業所の手順に従って管理者・主治医・緊急連絡先へ連絡してください。
           </p>
         </section>
       </main>
 
       <footer class="footer">
         <p><span data-office-name>DPRO訪問看護ステーション（デモ）</span></p>
-        <p>Version <span data-version>NURSING-1</span></p>
+        <p>Version <span data-version>NURSING-5</span></p>
       </footer>
     </div>
     <div class="toast" data-toast role="status" aria-live="polite"></div>

@@ -1,0 +1,190 @@
+.staff-login-wrap {
+  display: grid;
+  place-items: center;
+}
+
+.staff-login-card {
+  width: min(100%, 760px);
+}
+
+.input-with-action {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 10px;
+}
+
+.staff-app[hidden],
+[data-staff-work-forms][hidden],
+[data-selected-visit-section][hidden] {
+  display: none !important;
+}
+
+.staff-session-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 16px 20px;
+  border: 1px solid var(--nursing-border, #d7e2e2);
+  border-radius: var(--nursing-radius, 18px);
+  background: var(--nursing-white, #fff);
+  box-shadow: 0 8px 24px rgba(23, 50, 77, 0.06);
+}
+
+.staff-session-bar > div {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 9px;
+}
+
+.staff-session-role {
+  color: var(--nursing-muted, #60717a);
+  font-size: 0.9rem;
+}
+
+.staff-visit-card {
+  cursor: pointer;
+  transition:
+    border-color 150ms ease,
+    box-shadow 150ms ease,
+    transform 150ms ease;
+}
+
+.staff-visit-card:hover {
+  transform: translateY(-1px);
+}
+
+.staff-visit-card.is-selected {
+  border-color: var(--nursing-teal, #0e5a5a);
+  box-shadow: 0 0 0 3px rgba(14, 90, 90, 0.13);
+}
+
+.staff-visit-card:focus-within {
+  border-color: var(--nursing-teal, #0e5a5a);
+}
+
+.staff-detail-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.staff-detail-list {
+  display: grid;
+  gap: 12px;
+  margin: 16px 0 0;
+}
+
+.staff-detail-list > div {
+  display: grid;
+  gap: 4px;
+  padding-bottom: 11px;
+  border-bottom: 1px solid var(--nursing-border, #d7e2e2);
+}
+
+.staff-detail-list > div:last-child {
+  padding-bottom: 0;
+  border-bottom: 0;
+}
+
+.staff-detail-list dt {
+  color: var(--nursing-muted, #60717a);
+  font-size: 0.82rem;
+  font-weight: 800;
+}
+
+.staff-detail-list dd {
+  margin: 0;
+  overflow-wrap: anywhere;
+  font-weight: 800;
+}
+
+.staff-handoff-list li {
+  padding: 12px 14px;
+  border-left: 4px solid var(--nursing-warning, #9b6708);
+  border-radius: 8px;
+  background: var(--nursing-warning-soft, #fff7df);
+}
+
+.staff-card-subline {
+  margin-top: 5px;
+  color: var(--nursing-muted, #60717a);
+  font-size: 0.86rem;
+}
+
+.staff-card-address {
+  margin-top: 7px;
+  color: var(--nursing-text, #17324d);
+  font-size: 0.9rem;
+}
+
+.staff-card-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 8px;
+}
+
+.staff-selected-card {
+  padding: clamp(20px, 3vw, 28px);
+  border: 1px solid var(--nursing-border, #d7e2e2);
+  border-radius: var(--nursing-radius, 18px);
+  background: var(--nursing-teal-soft, #edf7f6);
+}
+
+.staff-session-bar .button-row {
+  justify-content: flex-end;
+}
+
+@media (max-width: 780px) {
+  .staff-session-bar {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .staff-session-bar .button-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .staff-detail-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .visit-card.staff-visit-card {
+    grid-template-columns: 72px minmax(0, 1fr);
+  }
+
+  .staff-card-actions {
+    grid-column: 1 / -1;
+    justify-content: stretch;
+  }
+
+  .staff-card-actions .btn {
+    flex: 1 1 140px;
+  }
+}
+
+@media (max-width: 520px) {
+  .input-with-action {
+    grid-template-columns: 1fr;
+  }
+
+  .staff-session-bar .button-row {
+    grid-template-columns: 1fr;
+  }
+
+  .visit-card.staff-visit-card {
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+
+  .visit-card.staff-visit-card .visit-card__time {
+    font-size: 1.05rem;
+  }
+
+  .staff-card-actions {
+    grid-column: auto;
+  }
+}

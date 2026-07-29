@@ -7,9 +7,11 @@
     <meta name="description" content="DPRO 訪問看護ステーション LINEの管理者PC画面です。">
     <title>管理者PC｜DPRO 訪問看護ステーション LINE</title>
     <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="owner.css">
     <script src="config.js" defer></script>
     <script src="api.js" defer></script>
     <script src="app.js" defer></script>
+    <script src="owner.js" defer></script>
   </head>
   <body>
     <a class="skip-link" href="#main">本文へ移動</a>
@@ -26,9 +28,7 @@
           <div class="topbar__actions">
             <span class="demo-badge" data-demo-only>デモ環境</span>
             <span class="role-badge">管理者PC</span>
-            <button class="nav-toggle" type="button" data-nav-toggle aria-expanded="false">
-              メニュー
-            </button>
+            <button class="nav-toggle" type="button" data-nav-toggle aria-expanded="false">メニュー</button>
           </div>
         </div>
         <nav class="global-nav" data-global-nav aria-label="画面一覧">
@@ -46,357 +46,283 @@
       <main class="page" id="main">
         <section class="hero">
           <div class="hero__content">
-            <p class="eyebrow" data-current-date>2026年7月27日</p>
-            <h1>本日の訪問看護・管理ダッシュボード</h1>
+            <p class="eyebrow" data-current-date>本日</p>
+            <h1>訪問看護・管理ダッシュボード</h1>
             <p class="lead">
-              相談受付、利用者検索、訪問予定、スタッフ配置、家族報告承認、指示書期限を左メニューから切り替えます。
+              実データの件数確認、スタッフ登録、アクセスコード発行、LINE連携承認を管理します。
+              アクセスコードは発行後に再表示できないため、本人へ安全に伝えてください。
             </p>
           </div>
         </section>
 
-        <section class="section form-card" aria-labelledby="admin-login-heading">
+        <section class="section form-card owner-login-card" data-owner-login-view aria-labelledby="owner-login-heading">
           <div class="section-heading">
             <div>
               <p class="eyebrow">管理者認証</p>
-              <h2 id="admin-login-heading">承認業務を開始する</h2>
+              <h2 id="owner-login-heading">管理画面へログイン</h2>
             </div>
-            <span class="status status--progress" data-admin-session-badge>未認証</span>
+            <span class="status status--progress" data-owner-session-badge>未認証</span>
           </div>
-          <form class="form-grid" data-api-form data-admin-login-form>
+          <form class="form-grid" data-owner-login-form>
             <div class="field field--full">
-              <label for="owner-login-code">管理コード</label>
-              <div class="input-with-action">
+              <label for="owner-admin-code">管理コード</label>
+              <div class="input-with-action owner-code-row">
                 <input
-                  id="owner-login-code"
+                  id="owner-admin-code"
                   name="admin_code"
                   type="password"
-                  inputmode="numeric"
                   autocomplete="current-password"
+                  inputmode="numeric"
+                  minlength="4"
+                  maxlength="128"
                   required
                 >
-                <button class="btn btn--secondary" type="button" data-clear-target="owner-login-code">
-                  削除
-                </button>
+                <button class="btn btn--secondary" type="button" data-owner-clear-code>削除</button>
               </div>
-              <p class="field__hint">デモ管理コードは1234です。本番では強固な認証へ切り替えます。</p>
+              <p class="field__hint">デモ環境の管理コードは1234です。</p>
             </div>
             <div class="field field--full">
-              <button class="btn btn--primary" type="submit" data-submit-button>
-                ログインして承認待ちを取得
+              <button class="btn btn--primary" type="submit" data-owner-login-button>
+                ログインして実データを取得
               </button>
-              <button class="btn btn--secondary" type="button" data-admin-logout hidden>
-                ログアウト
-              </button>
-              <div class="form-status" data-admin-login-status role="status" aria-live="polite" hidden></div>
+              <div class="form-status" data-owner-login-status role="status" aria-live="polite" hidden></div>
             </div>
           </form>
         </section>
 
-        <div class="management-layout section">
-          <div class="side-menu" data-panel-group role="tablist" aria-label="管理機能">
-            <button type="button" role="tab" aria-selected="true" data-panel-target="dashboard-panel">
-              ダッシュボード
-            </button>
-            <button type="button" role="tab" aria-selected="false" data-panel-target="inquiry-panel">
-              相談・利用者
-            </button>
-            <button type="button" role="tab" aria-selected="false" data-panel-target="schedule-panel">
-              訪問予定
-            </button>
-            <button type="button" role="tab" aria-selected="false" data-panel-target="approval-panel">
-              承認
-            </button>
-            <button type="button" role="tab" aria-selected="false" data-panel-target="task-panel">
-              期限・タスク
-            </button>
-            <button type="button" role="tab" aria-selected="false" data-panel-target="settings-panel">
-              事業所設定
-            </button>
-          </div>
+        <div data-owner-app hidden>
+          <section class="section owner-session-bar" aria-label="管理者セッション">
+            <div>
+              <span class="status status--done">管理者認証済み</span>
+              <strong data-owner-environment>デモ環境</strong>
+            </div>
+            <div class="button-row">
+              <button class="btn btn--secondary btn--small" type="button" data-owner-refresh>すべて更新</button>
+              <button class="btn btn--danger btn--small" type="button" data-owner-logout>ログアウト</button>
+            </div>
+          </section>
 
-          <div>
-            <section class="panel is-active" id="dashboard-panel" data-panel role="tabpanel">
-              <div class="grid grid--4">
-                <article class="metric">
-                  <p class="metric__label">本日の訪問</p>
-                  <p class="metric__value">18件</p>
-                  <p class="metric__detail">完了 9・訪問中 2</p>
-                </article>
-                <article class="metric metric--danger">
-                  <p class="metric__label">未配置</p>
-                  <p class="metric__value">2件</p>
-                  <p class="metric__detail">本日分 1件</p>
-                </article>
-                <article class="metric metric--warning">
-                  <p class="metric__label">要確認</p>
-                  <p class="metric__value">3件</p>
-                  <p class="metric__detail">状態変化 1件</p>
-                </article>
-                <article class="metric">
-                  <p class="metric__label">新規相談</p>
-                  <p class="metric__value">4件</p>
-                  <p class="metric__detail">未対応 2件</p>
-                </article>
-              </div>
+          <div class="management-layout section">
+            <div class="side-menu" data-panel-group role="tablist" aria-label="管理機能">
+              <button type="button" role="tab" aria-selected="true" data-panel-target="dashboard-panel">ダッシュボード</button>
+              <button type="button" role="tab" aria-selected="false" data-panel-target="staff-panel">スタッフ管理</button>
+              <button type="button" role="tab" aria-selected="false" data-panel-target="approval-panel">LINE連携承認</button>
+              <button type="button" role="tab" aria-selected="false" data-panel-target="patient-panel">利用者検索</button>
+            </div>
 
-              <div class="section-heading">
-                <div>
-                  <p class="eyebrow">リアルタイム状況</p>
-                  <h2>本日の訪問</h2>
+            <div>
+              <section class="panel is-active" id="dashboard-panel" data-panel role="tabpanel">
+                <div class="section-heading">
+                  <div>
+                    <p class="eyebrow">Supabase実データ</p>
+                    <h2>本日の状況</h2>
+                  </div>
+                  <span class="status status--progress" data-dashboard-badge>取得待ち</span>
                 </div>
-              </div>
-              <div class="table-wrap">
-                <table>
-                  <thead>
-                    <tr>
-                      <th>時間</th>
-                      <th>利用者</th>
-                      <th>担当</th>
-                      <th>状態</th>
-                      <th>確認</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr>
-                      <td>14:00</td>
-                      <td>山田 花子様</td>
-                      <td>佐藤・中村</td>
-                      <td><span class="status status--progress">訪問中</span></td>
-                      <td><button class="btn btn--secondary btn--small" type="button" data-preview-action>詳細</button></td>
-                    </tr>
-                    <tr>
-                      <td>15:00</td>
-                      <td>井上 次郎様</td>
-                      <td>未配置</td>
-                      <td><span class="status status--alert">要配置</span></td>
-                      <td><button class="btn btn--danger btn--small" type="button" data-preview-action>配置</button></td>
-                    </tr>
-                    <tr>
-                      <td>15:30</td>
-                      <td>高橋 正様</td>
-                      <td>佐藤</td>
-                      <td><span class="status status--scheduled">予定</span></td>
-                      <td><button class="btn btn--secondary btn--small" type="button" data-preview-action>詳細</button></td>
-                    </tr>
-                  </tbody>
-                </table>
-              </div>
-
-              <div class="grid grid--2">
+                <div class="form-status form-status--info" data-dashboard-status role="status" aria-live="polite">
+                  管理者ログイン後に取得します。
+                </div>
+                <div class="grid grid--3 owner-metrics section">
+                  <article class="metric">
+                    <p class="metric__label">本日の訪問</p>
+                    <p class="metric__value" data-count-today-visits>0件</p>
+                    <p class="metric__detail">訪問予定テーブル</p>
+                  </article>
+                  <article class="metric metric--warning">
+                    <p class="metric__label">新規相談</p>
+                    <p class="metric__value" data-count-inquiries>0件</p>
+                    <p class="metric__detail">新規・確認中</p>
+                  </article>
+                  <article class="metric metric--warning">
+                    <p class="metric__label">家族からの連絡</p>
+                    <p class="metric__value" data-count-contacts>0件</p>
+                    <p class="metric__detail">新規・確認中</p>
+                  </article>
+                  <article class="metric metric--warning">
+                    <p class="metric__label">家族報告承認待ち</p>
+                    <p class="metric__value" data-count-reports>0件</p>
+                    <p class="metric__detail">スタッフ提出分</p>
+                  </article>
+                  <article class="metric metric--warning">
+                    <p class="metric__label">LINE連携承認待ち</p>
+                    <p class="metric__value" data-count-links>0件</p>
+                    <p class="metric__detail">本人・家族申請</p>
+                  </article>
+                  <article class="metric metric--danger">
+                    <p class="metric__label">指示書期限30日以内</p>
+                    <p class="metric__value" data-count-instructions>0件</p>
+                    <p class="metric__detail">更新確認対象</p>
+                  </article>
+                  <article class="metric">
+                    <p class="metric__label">有効スタッフ</p>
+                    <p class="metric__value" data-count-active-staff>0名</p>
+                    <p class="metric__detail">在籍・ログイン可否を含む</p>
+                  </article>
+                  <article class="metric">
+                    <p class="metric__label">ログイン準備済み</p>
+                    <p class="metric__value" data-count-login-ready>0名</p>
+                    <p class="metric__detail">アクセスコード設定済み</p>
+                  </article>
+                </div>
                 <article class="notice-card">
-                  <p class="eyebrow">優先確認</p>
-                  <h2>状態変化の報告があります</h2>
-                  <p>担当スタッフの内部報告を確認し、事業所手順に沿って対応してください。</p>
-                  <div class="button-row">
-                    <button class="btn btn--danger" type="button" data-preview-action>報告を確認</button>
-                  </div>
+                  <p class="eyebrow">今回のSTEP</p>
+                  <h3>固定サンプル表示を廃止しました</h3>
+                  <p>
+                    この画面の件数はWorkerを通してSupabaseから取得します。未接続時に架空の患者名や件数は表示しません。
+                  </p>
                 </article>
-                <article class="notice-card">
-                  <p class="eyebrow">予定変更</p>
-                  <h2>家族から2件の依頼</h2>
-                  <p>変更はまだ確定していません。代替日時とスタッフ配置を確認してください。</p>
+              </section>
+
+              <section class="panel" id="staff-panel" data-panel role="tabpanel" hidden>
+                <div class="section-heading">
+                  <div>
+                    <p class="eyebrow">スタッフ用ログイン管理</p>
+                    <h2>スタッフ登録・アクセスコード発行</h2>
+                  </div>
                   <div class="button-row">
-                    <button class="btn btn--secondary" type="button" data-preview-action>依頼を確認</button>
+                    <select data-staff-filter aria-label="スタッフ状態で絞り込み">
+                      <option value="all">全スタッフ</option>
+                      <option value="active">在籍中</option>
+                      <option value="leave">休職中</option>
+                      <option value="inactive">無効</option>
+                    </select>
+                    <button class="btn btn--secondary btn--small" type="button" data-staff-refresh>一覧更新</button>
                   </div>
-                </article>
-              </div>
-            </section>
+                </div>
+                <div class="form-status form-status--info" data-staff-admin-status role="status" aria-live="polite">
+                  スタッフ一覧を取得しています。
+                </div>
 
-            <section class="panel" id="inquiry-panel" data-panel role="tabpanel" hidden>
-              <div class="section-heading">
-                <div>
-                  <p class="eyebrow">受付と検索</p>
-                  <h2>新規相談・利用者</h2>
-                </div>
-              </div>
-              <article class="form-card">
-                <form class="form-grid" data-preview-form>
-                  <div class="field field--full">
-                    <label for="patient-search">利用者検索</label>
-                    <input
-                      id="patient-search"
-                      name="patient_search"
-                      type="search"
-                      placeholder="氏名・電話番号・利用者番号・LINEユーザーID"
-                    >
-                    <p class="field__hint">
-                      電話番号はハイフン、空白、全角、+81を正規化して照合します。
-                    </p>
-                  </div>
-                  <div class="field field--full">
-                    <button class="btn btn--primary" type="submit">利用者を検索する</button>
-                  </div>
-                </form>
-              </article>
-              <div class="table-wrap">
-                <table>
-                  <thead>
-                    <tr>
-                      <th>受付日時</th>
-                      <th>相談者</th>
-                      <th>相談種別</th>
-                      <th>状態</th>
-                      <th>操作</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr>
-                      <td>7/27 10:20</td>
-                      <td>山本様ご家族</td>
-                      <td>退院後の相談</td>
-                      <td><span class="status status--alert">未対応</span></td>
-                      <td><button class="btn btn--secondary btn--small" type="button" data-preview-action>受付</button></td>
-                    </tr>
-                    <tr>
-                      <td>7/27 9:05</td>
-                      <td>みなみ病院</td>
-                      <td>新規紹介</td>
-                      <td><span class="status status--progress">確認中</span></td>
-                      <td><button class="btn btn--secondary btn--small" type="button" data-preview-action>詳細</button></td>
-                    </tr>
-                  </tbody>
-                </table>
-              </div>
-            </section>
-
-            <section class="panel" id="schedule-panel" data-panel role="tabpanel" hidden>
-              <div class="section-heading">
-                <div>
-                  <p class="eyebrow">配置と重複確認</p>
-                  <h2>訪問予定</h2>
-                </div>
-                <button class="btn btn--primary" type="button" data-preview-action>新しい訪問予定</button>
-              </div>
-              <div class="note note--warning">
-                同一スタッフ、同一利用者、移動余裕時間、複数名訪問の組み合わせを登録直前に再検査します。
-              </div>
-              <ul class="visit-list">
-                <li class="visit-card">
-                  <div class="visit-card__time">15:00</div>
-                  <div>
-                    <h3>井上 次郎様</h3>
-                    <p class="visit-card__meta">60分・看護師・移動余裕30分</p>
-                  </div>
-                  <div class="visit-card__actions">
-                    <span class="status status--alert">未配置</span>
-                    <button class="btn btn--primary btn--small" type="button" data-preview-action>スタッフ配置</button>
-                  </div>
-                </li>
-                <li class="visit-card">
-                  <div class="visit-card__time">16:30</div>
-                  <div>
-                    <h3>中島 和子様</h3>
-                    <p class="visit-card__meta">40分・理学療法士・定期系列 #R-018</p>
-                  </div>
-                  <div class="visit-card__actions">
-                    <span class="status status--scheduled">配置済み</span>
-                    <button class="btn btn--secondary btn--small" type="button" data-preview-action>編集</button>
-                  </div>
-                </li>
-              </ul>
-            </section>
-
-            <section class="panel" id="approval-panel" data-panel role="tabpanel" hidden>
-              <div class="section-heading">
-                <div>
-                  <p class="eyebrow">本人・家族関係を事業所で確認</p>
-                  <h2>LINE連携承認</h2>
-                </div>
-                <button class="btn btn--secondary" type="button" data-refresh-line-links disabled>
-                  最新の申請を取得
-                </button>
-              </div>
-              <div class="note note--warning">
-                利用者番号、登録電話番号、申請者と利用者の関係を事業所の登録情報と照合してから承認してください。画面表示だけで本人確認を完了しないでください。
-              </div>
-              <div class="form-status" data-line-link-admin-status role="status" aria-live="polite" hidden></div>
-              <div class="grid grid--2" data-line-link-list>
-                <div class="empty-state">
-                  <strong>管理者ログインが必要です</strong>
-                  ログイン後、承認待ちのLINE連携申請を取得します。
-                </div>
-              </div>
-            </section>
-
-            <section class="panel" id="task-panel" data-panel role="tabpanel" hidden>
-              <div class="section-heading">
-                <div>
-                  <p class="eyebrow">期限管理</p>
-                  <h2>指示書・未対応タスク</h2>
-                </div>
-              </div>
-              <ul class="visit-list">
-                <li class="visit-card">
-                  <div class="visit-card__time">残り7日</div>
-                  <div>
-                    <h3>訪問看護指示書の期限確認</h3>
-                    <p class="visit-card__meta">対象：田中 一郎様・原本はDPROに保存しません</p>
-                  </div>
-                  <div class="visit-card__actions">
-                    <span class="status status--alert">期限間近</span>
-                    <button class="btn btn--secondary btn--small" type="button" data-preview-action>対応記録</button>
-                  </div>
-                </li>
-                <li class="visit-card">
-                  <div class="visit-card__time">本日</div>
-                  <div>
-                    <h3>予定変更の回答</h3>
-                    <p class="visit-card__meta">対象：高橋 正様・家族からの依頼</p>
-                  </div>
-                  <div class="visit-card__actions">
-                    <span class="status status--progress">未回答</span>
-                    <button class="btn btn--secondary btn--small" type="button" data-preview-action>回答する</button>
-                  </div>
-                </li>
-              </ul>
-            </section>
-
-            <section class="panel" id="settings-panel" data-panel role="tabpanel" hidden>
-              <div class="section-heading">
-                <div>
-                  <p class="eyebrow">長い設定は左メニュー切替</p>
-                  <h2>事業所設定</h2>
-                </div>
-              </div>
-              <article class="form-card">
-                <form class="form-grid" data-preview-form>
-                  <div class="field">
-                    <label for="office-name">事業所名</label>
-                    <input id="office-name" name="office_name" type="text" value="DPRO訪問看護ステーション（デモ）">
-                  </div>
-                  <div class="field">
-                    <label for="office-code">事業所コード</label>
-                    <input id="office-code" name="office_code" type="text" value="dpro_home_nursing_demo" readonly>
-                  </div>
-                  <div class="field">
-                    <label for="office-phone">通常連絡先</label>
-                    <input id="office-phone" name="office_phone" type="tel" placeholder="未設定">
-                  </div>
-                  <div class="field">
-                    <label for="emergency-phone">緊急連絡先</label>
-                    <input id="emergency-phone" name="emergency_phone" type="tel" placeholder="本番導入時に設定">
-                  </div>
-                  <div class="field field--full">
-                    <label for="owner-code">管理コード・デモ確認用</label>
-                    <div class="input-with-action">
-                      <input id="owner-code" name="owner_code" type="password" inputmode="numeric" autocomplete="new-password">
-                      <button class="btn btn--secondary" type="button" data-clear-target="owner-code">削除</button>
+                <article class="form-card section">
+                  <p class="eyebrow">新規登録</p>
+                  <h3>スタッフを追加する</h3>
+                  <form class="form-grid section" data-staff-create-form>
+                    <div class="field">
+                      <label for="new-staff-code">スタッフコード</label>
+                      <input id="new-staff-code" name="staff_code" maxlength="64" placeholder="例：NURSE-01" required>
                     </div>
-                    <p class="field__hint">本番では管理コード単独認証を使用しません。デモ管理コードは1234です。</p>
+                    <div class="field">
+                      <label for="new-staff-name">表示名</label>
+                      <input id="new-staff-name" name="display_name" maxlength="100" placeholder="例：佐藤看護師" required>
+                    </div>
+                    <div class="field">
+                      <label for="new-staff-kana">フリガナ</label>
+                      <input id="new-staff-kana" name="name_kana" maxlength="100">
+                    </div>
+                    <div class="field">
+                      <label for="new-staff-role">職種・権限</label>
+                      <select id="new-staff-role" name="professional_role" required>
+                        <option value="nurse">看護師</option>
+                        <option value="public_health_nurse">保健師</option>
+                        <option value="midwife">助産師</option>
+                        <option value="assistant_nurse">准看護師</option>
+                        <option value="pt">理学療法士</option>
+                        <option value="ot">作業療法士</option>
+                        <option value="st">言語聴覚士</option>
+                        <option value="office">事務</option>
+                        <option value="manager">管理者</option>
+                      </select>
+                    </div>
+                    <div class="field">
+                      <label for="new-staff-phone">電話番号</label>
+                      <input id="new-staff-phone" name="phone" inputmode="tel" maxlength="30">
+                    </div>
+                    <div class="field">
+                      <label for="new-access-code">初回アクセスコード</label>
+                      <div class="owner-secret-row">
+                        <input id="new-access-code" name="access_code" minlength="8" maxlength="128" autocomplete="new-password" placeholder="8文字以上">
+                        <button class="btn btn--secondary btn--small" type="button" data-generate-target="new-access-code">自動生成</button>
+                      </div>
+                    </div>
+                    <div class="field field--full">
+                      <label class="choice">
+                        <input type="checkbox" name="login_enabled" checked>
+                        スタッフ画面へのログインを許可する
+                      </label>
+                    </div>
+                    <div class="field field--full">
+                      <button class="btn btn--primary" type="submit" data-staff-create-button>スタッフを登録する</button>
+                      <div class="form-status" data-staff-create-status role="status" aria-live="polite" hidden></div>
+                    </div>
+                  </form>
+                </article>
+
+                <div class="owner-staff-list section" data-staff-list>
+                  <div class="empty-state">
+                    <strong>スタッフ一覧を取得中です</strong>
+                    ログイン後に実データを表示します。
                   </div>
-                  <div class="field field--full">
-                    <button class="btn btn--primary" type="submit">設定内容を確認する</button>
+                </div>
+              </section>
+
+              <section class="panel" id="approval-panel" data-panel role="tabpanel" hidden>
+                <div class="section-heading">
+                  <div>
+                    <p class="eyebrow">本人・家族ポータル</p>
+                    <h2>LINE連携承認待ち</h2>
                   </div>
-                </form>
-              </article>
-            </section>
+                  <button class="btn btn--secondary btn--small" type="button" data-link-refresh>申請を更新</button>
+                </div>
+                <div class="form-status form-status--info" data-link-status role="status" aria-live="polite">
+                  承認待ち申請を取得しています。
+                </div>
+                <div class="owner-link-list section" data-link-list>
+                  <div class="empty-state">
+                    <strong>承認待ち申請を取得中です</strong>
+                    申請内容と登録情報を照合してから承認してください。
+                  </div>
+                </div>
+                <aside class="note note--warning section">
+                  <strong>承認前の確認</strong>
+                  <p>本人・家族の同意、電話番号、続柄、家族ポータル閲覧許可を事業所側で照合してください。</p>
+                </aside>
+              </section>
+
+              <section class="panel" id="patient-panel" data-panel role="tabpanel" hidden>
+                <div class="section-heading">
+                  <div>
+                    <p class="eyebrow">電話番号正規化対応</p>
+                    <h2>利用者検索</h2>
+                  </div>
+                </div>
+                <article class="form-card">
+                  <form class="form-grid" data-patient-search-form>
+                    <div class="field field--full">
+                      <label for="owner-patient-search">氏名・電話番号・利用者番号</label>
+                      <div class="owner-search-row">
+                        <input id="owner-patient-search" name="query" type="search" minlength="2" maxlength="100" required>
+                        <button class="btn btn--primary" type="submit" data-patient-search-button>検索</button>
+                      </div>
+                      <p class="field__hint">電話番号はハイフン、空白、全角、+81を正規化して照合します。</p>
+                    </div>
+                  </form>
+                </article>
+                <div class="form-status" data-patient-search-status role="status" aria-live="polite" hidden></div>
+                <div class="table-wrap section" data-patient-results hidden>
+                  <table>
+                    <thead>
+                      <tr><th>利用者番号</th><th>氏名</th><th>電話番号</th><th>状態</th><th>更新</th></tr>
+                    </thead>
+                    <tbody data-patient-results-body></tbody>
+                  </table>
+                </div>
+              </section>
+            </div>
           </div>
         </div>
+
+        <section class="section note note--warning">
+          <strong>アクセスコードの取扱い</strong>
+          <p>
+            発行したアクセスコードはデータベースに復元不能なハッシュとして保存されます。画面を閉じる前に本人へ安全な方法で伝えてください。
+            再発行すると、そのスタッフの既存ログインセッションはすべて無効になります。
+          </p>
+        </section>
       </main>
 
       <footer class="footer">
         <p><span data-office-name>DPRO訪問看護ステーション（デモ）</span></p>
-        <p>事業所コード <span data-office-code>dpro_home_nursing_demo</span>・Version <span data-version>NURSING-1</span></p>
+        <p>Version <span data-version>NURSING-6</span></p>
       </footer>
     </div>
     <div class="toast" data-toast role="status" aria-live="polite"></div>

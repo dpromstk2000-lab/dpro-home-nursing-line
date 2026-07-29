@@ -9,11 +9,13 @@
     <link rel="stylesheet" href="styles.css">
     <link rel="stylesheet" href="owner.css">
     <link rel="stylesheet" href="owner-visits.css">
+    <link rel="stylesheet" href="owner-reports.css">
     <script src="config.js" defer></script>
     <script src="api.js" defer></script>
     <script src="app.js" defer></script>
     <script src="owner.js" defer></script>
     <script src="owner-visits.js" defer></script>
+    <script src="owner-reports.js" defer></script>
   </head>
   <body>
     <a class="skip-link" href="#main">本文へ移動</a>
@@ -51,7 +53,7 @@
             <p class="eyebrow" data-current-date>本日</p>
             <h1>訪問看護・管理ダッシュボード</h1>
             <p class="lead">
-              実データの件数確認、訪問予定登録、スタッフ配置、アクセスコード発行、LINE連携承認を管理します。
+              実データの件数確認、訪問予定登録、スタッフ配置、家族報告承認、アクセスコード発行、LINE連携承認を管理します。
               アクセスコードは発行後に再表示できないため、本人へ安全に伝えてください。
             </p>
           </div>
@@ -109,6 +111,7 @@
               <button type="button" role="tab" aria-selected="true" data-panel-target="dashboard-panel">ダッシュボード</button>
               <button type="button" role="tab" aria-selected="false" data-panel-target="visits-panel">訪問予定・配置</button>
               <button type="button" role="tab" aria-selected="false" data-panel-target="staff-panel">スタッフ管理</button>
+              <button type="button" role="tab" aria-selected="false" data-panel-target="reports-panel">家族報告承認</button>
               <button type="button" role="tab" aria-selected="false" data-panel-target="approval-panel">LINE連携承認</button>
               <button type="button" role="tab" aria-selected="false" data-panel-target="patient-panel">利用者検索</button>
             </div>
@@ -432,6 +435,84 @@
                     ログイン後に実データを表示します。
                   </div>
                 </div>
+              </section>
+
+
+              <section class="panel" id="reports-panel" data-panel role="tabpanel" hidden>
+                <div class="section-heading">
+                  <div>
+                    <p class="eyebrow">スタッフ提出 → 管理者確認 → 家族公開</p>
+                    <h2>家族向け報告の確認・承認</h2>
+                  </div>
+                  <div class="button-row">
+                    <a class="btn btn--secondary btn--small" href="member.html" target="_blank" rel="noopener">
+                      本人・家族画面を開く
+                    </a>
+                    <button class="btn btn--secondary btn--small" type="button" data-report-refresh>
+                      報告を更新
+                    </button>
+                  </div>
+                </div>
+
+                <div
+                  class="form-status form-status--info"
+                  data-report-status
+                  role="status"
+                  aria-live="polite"
+                >
+                  承認待ちの家族向け報告を取得しています。
+                </div>
+
+                <section class="section" aria-labelledby="pending-family-reports-heading">
+                  <div class="section-heading">
+                    <div>
+                      <p class="eyebrow">公開前の最終確認</p>
+                      <h3 id="pending-family-reports-heading">承認待ち報告</h3>
+                    </div>
+                    <span class="status status--progress" data-pending-report-count>取得待ち</span>
+                  </div>
+                  <div class="owner-report-list section" data-pending-report-list>
+                    <div class="empty-state">
+                      <strong>承認待ち報告を取得中です</strong>
+                      スタッフが提出した家族向け文章だけを表示します。
+                    </div>
+                  </div>
+                </section>
+
+                <section class="section" aria-labelledby="published-family-reports-heading">
+                  <div class="section-heading">
+                    <div>
+                      <p class="eyebrow">本人・家族ページへ公開済み</p>
+                      <h3 id="published-family-reports-heading">最近公開した報告</h3>
+                    </div>
+                    <span class="status status--done" data-published-report-count>取得待ち</span>
+                  </div>
+                  <div class="owner-report-list section" data-published-report-list>
+                    <div class="empty-state">
+                      <strong>公開済み報告を取得中です</strong>
+                      最近公開した報告を確認できます。
+                    </div>
+                  </div>
+                </section>
+
+                <aside class="note note--warning section">
+                  <strong>承認時の重要確認</strong>
+                  <p>
+                    承認すると本人・家族ページへ直ちに公開されます。病名、詳細な看護記録、
+                    スタッフ間の内部申し送り、第三者の個人情報が含まれていないことを確認してください。
+                    必要な場合は文章を修正してから承認します。
+                  </p>
+                </aside>
+
+                <aside class="note section owner-report-test-guide" data-demo-only>
+                  <strong>NURSING-8 実地検査の流れ</strong>
+                  <ol>
+                    <li>スタッフ画面の完了済み訪問から、家族向け報告案を「承認待ち」で保存します。</li>
+                    <li>この画面で文章を確認し、「確認して家族へ公開」を押します。</li>
+                    <li>LINE内で本人・家族ページの連携申請を行い、左メニュー「LINE連携承認」で承認します。</li>
+                    <li>本人・家族ページを開き、公開した報告だけが表示されることを確認します。</li>
+                  </ol>
+                </aside>
               </section>
 
               <section class="panel" id="approval-panel" data-panel role="tabpanel" hidden>

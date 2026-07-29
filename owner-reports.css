@@ -1,0 +1,89 @@
+.owner-report-list {
+  display: grid;
+  gap: 16px;
+}
+
+.owner-report-card {
+  padding: 20px;
+  border: 1px solid var(--nursing-border, #d7e2e2);
+  border-radius: var(--nursing-radius, 18px);
+  background: var(--nursing-white, #fff);
+}
+
+.owner-report-card--published {
+  background: var(--nursing-teal-soft, #edf7f6);
+}
+
+.owner-report-card__header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.owner-report-card__header h4 {
+  margin: 0;
+}
+
+.owner-report-card__meta {
+  margin-top: 6px;
+  color: var(--nursing-muted, #60717a);
+  font-size: 0.9rem;
+}
+
+.owner-report-text-field {
+  display: grid;
+  gap: 8px;
+  margin-top: 18px;
+}
+
+.owner-report-text-field > span {
+  font-weight: 800;
+}
+
+.owner-report-text-field textarea {
+  min-height: 130px;
+}
+
+.owner-report-text-field small {
+  color: var(--nursing-muted, #60717a);
+}
+
+.owner-report-actions {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 14px;
+}
+
+.owner-report-published-text {
+  margin-top: 16px;
+  padding: 14px 16px;
+  border-left: 4px solid var(--nursing-teal, #0e5a5a);
+  border-radius: 8px;
+  background: var(--nursing-white, #fff);
+  white-space: pre-wrap;
+}
+
+.owner-report-test-guide ol {
+  margin: 12px 0 0;
+  padding-left: 1.4rem;
+}
+
+.owner-report-test-guide li + li {
+  margin-top: 7px;
+}
+
+@media (max-width: 720px) {
+  .owner-report-card__header {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .owner-report-actions {
+    justify-content: stretch;
+  }
+
+  .owner-report-actions .btn {
+    width: 100%;
+  }
+}

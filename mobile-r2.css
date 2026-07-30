@@ -1,0 +1,41 @@
+/*
+ * NURSING-8-R2
+ * LINE内ブラウザで「メニュー／閉じる」の文字が縦に崩れる問題を修正。
+ */
+
+#line-link {
+  scroll-margin-top: 88px;
+}
+
+@media (max-width: 720px) {
+  .nav-toggle {
+    overflow: hidden;
+    font-size: 0 !important;
+    line-height: 1;
+    white-space: nowrap;
+  }
+
+  .nav-toggle::before {
+    content: "☰";
+    font-size: 1.65rem;
+    line-height: 1;
+  }
+
+  .nav-toggle[aria-expanded="true"]::before {
+    content: "×";
+    font-size: 2rem;
+  }
+
+  .global-nav.is-open {
+    position: relative;
+    z-index: 102;
+  }
+
+  .global-nav__inner {
+    max-height: min(65vh, 420px);
+  }
+
+  .form-status {
+    scroll-margin-top: 96px;
+  }
+}

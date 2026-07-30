@@ -4,11 +4,14 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="theme-color" content="#0e5a5a">
-    <meta name="description" content="DPRO 訪問看護ステーション LINEの管理者iPad画面です。">
+    <meta name="description" content="DPRO 訪問看護ステーション LINEの管理者iPad当日運用画面です。">
     <title>管理者iPad｜DPRO 訪問看護ステーション LINE</title>
     <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="owner-ipad.css">
     <script src="config.js" defer></script>
+    <script src="api.js" defer></script>
     <script src="app.js" defer></script>
+    <script src="owner-ipad.js" defer></script>
   </head>
   <body>
     <a class="skip-link" href="#main">本文へ移動</a>
@@ -25,9 +28,7 @@
           <div class="topbar__actions">
             <span class="demo-badge" data-demo-only>デモ環境</span>
             <span class="role-badge">管理者iPad</span>
-            <button class="nav-toggle" type="button" data-nav-toggle aria-expanded="false">
-              メニュー
-            </button>
+            <button class="nav-toggle" type="button" data-nav-toggle aria-expanded="false">メニュー</button>
           </div>
         </div>
         <nav class="global-nav" data-global-nav aria-label="画面一覧">
@@ -42,151 +43,208 @@
         </nav>
       </header>
 
-      <main class="page" id="main">
-        <section class="hero">
+      <main class="page ipad-page" id="main">
+        <section class="hero ipad-hero">
           <div class="hero__content">
-            <p class="eyebrow" data-current-date>2026年7月27日</p>
+            <p class="eyebrow" data-current-date>本日</p>
             <h1>本日の運営・承認</h1>
             <p class="lead">
-              iPadで当日の未配置、訪問状況、変更依頼、家族報告承認を大きなボタンで操作できます。
+              当日の訪問状況、家族からの連絡、公開承認、LINE連携、要確認事項を
+              Supabaseの実データで確認します。
             </p>
           </div>
         </section>
 
-        <div class="section">
-          <div class="tablet-tabs" data-panel-group role="tablist" aria-label="iPad機能">
-            <button type="button" role="tab" aria-selected="true" data-panel-target="today-ipad-panel">
-              本日の訪問
-            </button>
-            <button type="button" role="tab" aria-selected="false" data-panel-target="change-ipad-panel">
-              変更依頼
-            </button>
-            <button type="button" role="tab" aria-selected="false" data-panel-target="approval-ipad-panel">
-              承認
-            </button>
-            <button type="button" role="tab" aria-selected="false" data-panel-target="alert-ipad-panel">
-              要確認
-            </button>
+        <section class="section form-card ipad-login-card" data-ipad-login-view aria-labelledby="ipad-login-heading">
+          <div class="section-heading">
+            <div>
+              <p class="eyebrow">管理者認証</p>
+              <h2 id="ipad-login-heading">iPad運用画面へログイン</h2>
+            </div>
+            <span class="status status--progress" data-ipad-session-badge>未認証</span>
+          </div>
+          <form class="form-grid" data-ipad-login-form>
+            <div class="field field--full">
+              <label for="ipad-admin-code">管理コード</label>
+              <div class="input-with-action">
+                <input
+                  id="ipad-admin-code"
+                  name="admin_code"
+                  type="password"
+                  inputmode="numeric"
+                  autocomplete="current-password"
+                  minlength="4"
+                  maxlength="128"
+                  required
+                >
+                <button class="btn btn--secondary" type="button" data-ipad-clear-code>削除</button>
+              </div>
+              <p class="field__hint">デモ環境の管理コードは1234です。</p>
+            </div>
+            <div class="field field--full">
+              <button class="btn btn--primary ipad-primary-action" type="submit" data-ipad-login-button>
+                ログインして当日データを取得
+              </button>
+              <div class="form-status" data-ipad-login-status role="status" aria-live="polite" hidden></div>
+            </div>
+          </form>
+        </section>
+
+        <div data-ipad-app hidden>
+          <section class="section ipad-session-bar" aria-label="管理者セッション">
+            <div>
+              <span class="status status--done">管理者認証済み</span>
+              <strong data-ipad-environment>デモ環境</strong>
+            </div>
+            <div class="ipad-session-actions">
+              <label class="ipad-date-field">
+                <span>表示日</span>
+                <input type="date" data-ipad-date>
+              </label>
+              <button class="btn btn--secondary" type="button" data-ipad-refresh>すべて更新</button>
+              <button class="btn btn--danger" type="button" data-ipad-logout>ログアウト</button>
+            </div>
+          </section>
+
+          <div class="form-status form-status--info section" data-ipad-overview-status role="status" aria-live="polite">
+            実データを取得しています。
           </div>
 
-          <section class="panel is-active" id="today-ipad-panel" data-panel role="tabpanel">
-            <div class="grid grid--4">
+          <section class="section" aria-labelledby="ipad-metrics-heading">
+            <div class="section-heading">
+              <div>
+                <p class="eyebrow">当日運用サマリー</p>
+                <h2 id="ipad-metrics-heading">重要件数</h2>
+              </div>
+              <span class="status status--progress" data-ipad-latest-badge>更新中</span>
+            </div>
+            <div class="ipad-metrics">
               <article class="metric">
-                <p class="metric__label">本日</p>
-                <p class="metric__value">18</p>
+                <p class="metric__label">本日の訪問</p>
+                <p class="metric__value" data-ipad-count-visits>0件</p>
                 <p class="metric__detail">全訪問</p>
               </article>
               <article class="metric metric--danger">
                 <p class="metric__label">未配置</p>
-                <p class="metric__value">2</p>
-                <p class="metric__detail">至急確認</p>
+                <p class="metric__value" data-ipad-count-unassigned>0件</p>
+                <p class="metric__detail">担当スタッフなし</p>
               </article>
               <article class="metric metric--warning">
                 <p class="metric__label">訪問中</p>
-                <p class="metric__value">2</p>
+                <p class="metric__value" data-ipad-count-progress>0件</p>
                 <p class="metric__detail">開始済み</p>
               </article>
               <article class="metric">
                 <p class="metric__label">完了</p>
-                <p class="metric__value">9</p>
-                <p class="metric__detail">報告待ち 1</p>
+                <p class="metric__value" data-ipad-count-completed>0件</p>
+                <p class="metric__detail">終了時刻登録済み</p>
+              </article>
+              <article class="metric metric--warning">
+                <p class="metric__label">家族からの連絡</p>
+                <p class="metric__value" data-ipad-count-contacts>0件</p>
+                <p class="metric__detail">新規・確認中</p>
+              </article>
+              <article class="metric metric--danger">
+                <p class="metric__label">要確認</p>
+                <p class="metric__value" data-ipad-count-alerts>0件</p>
+                <p class="metric__detail">申し送り・期限</p>
               </article>
             </div>
-            <ul class="visit-list section">
-              <li class="visit-card">
-                <div class="visit-card__time">15:00</div>
+          </section>
+
+          <section class="section">
+            <div class="tablet-tabs ipad-tabs" data-panel-group role="tablist" aria-label="iPad機能">
+              <button type="button" role="tab" aria-selected="true" data-panel-target="today-ipad-panel">
+                本日の訪問
+                <span class="ipad-tab-count" data-tab-count-visits>0</span>
+              </button>
+              <button type="button" role="tab" aria-selected="false" data-panel-target="change-ipad-panel">
+                変更・連絡
+                <span class="ipad-tab-count" data-tab-count-contacts>0</span>
+              </button>
+              <button type="button" role="tab" aria-selected="false" data-panel-target="approval-ipad-panel">
+                承認
+                <span class="ipad-tab-count" data-tab-count-approvals>0</span>
+              </button>
+              <button type="button" role="tab" aria-selected="false" data-panel-target="alert-ipad-panel">
+                要確認
+                <span class="ipad-tab-count" data-tab-count-alerts>0</span>
+              </button>
+            </div>
+
+            <section class="panel is-active ipad-panel" id="today-ipad-panel" data-panel role="tabpanel">
+              <div class="section-heading">
                 <div>
-                  <h3>井上 次郎様</h3>
-                  <p class="visit-card__meta">看護師・60分・担当未配置</p>
+                  <p class="eyebrow">時間順・実データ</p>
+                  <h2>訪問状況</h2>
                 </div>
-                <div class="visit-card__actions">
-                  <span class="status status--alert">未配置</span>
-                  <button class="btn btn--danger" type="button" data-preview-action>スタッフを配置</button>
-                </div>
-              </li>
-              <li class="visit-card">
-                <div class="visit-card__time">15:30</div>
+                <a class="btn btn--secondary" href="owner.html#visits-panel">訪問予定・配置を開く</a>
+              </div>
+              <div class="ipad-card-list section" data-ipad-visit-list></div>
+            </section>
+
+            <section class="panel ipad-panel" id="change-ipad-panel" data-panel role="tabpanel" hidden>
+              <div class="section-heading">
                 <div>
-                  <h3>高橋 正様</h3>
-                  <p class="visit-card__meta">佐藤看護師・60分・移動余裕30分</p>
+                  <p class="eyebrow">本人・家族ポータルから受信</p>
+                  <h2>変更・欠席・折り返し希望</h2>
                 </div>
-                <div class="visit-card__actions">
-                  <span class="status status--scheduled">配置済み</span>
-                  <button class="btn btn--secondary" type="button" data-preview-action>詳細</button>
-                </div>
-              </li>
-            </ul>
-          </section>
+              </div>
+              <div class="ipad-card-list section" data-ipad-contact-list></div>
+              <aside class="note note--warning section">
+                <strong>予定変更について</strong>
+                <p>この画面で「対応済み」にしても訪問予定は自動変更されません。必要な場合は管理者PCの訪問予定・配置で更新してください。</p>
+              </aside>
+            </section>
 
-          <section class="panel" id="change-ipad-panel" data-panel role="tabpanel" hidden>
-            <div class="grid grid--2">
-              <article class="notice-card">
-                <span class="status status--alert">未回答</span>
-                <h2 class="section">7月29日の時間変更希望</h2>
-                <p>山田 花子様ご家族・10:00から午後への変更相談</p>
-                <div class="button-row">
-                  <button class="btn btn--primary" type="button" data-preview-action>代替日時を確認</button>
+            <section class="panel ipad-panel" id="approval-ipad-panel" data-panel role="tabpanel" hidden>
+              <div class="section-heading">
+                <div>
+                  <p class="eyebrow">公開前・連携前の最終確認</p>
+                  <h2>家族報告・LINE連携承認</h2>
                 </div>
-              </article>
-              <article class="notice-card">
-                <span class="status status--progress">確認中</span>
-                <h2 class="section">8月1日の欠席希望</h2>
-                <p>鈴木 洋子様ご本人・訪問リハビリ</p>
-                <div class="button-row">
-                  <button class="btn btn--secondary" type="button" data-preview-action>内容を確認</button>
-                </div>
-              </article>
-            </div>
-          </section>
+              </div>
+              <div class="ipad-approval-columns section">
+                <section>
+                  <h3>家族向け報告</h3>
+                  <div class="ipad-card-list section" data-ipad-report-list></div>
+                </section>
+                <section>
+                  <h3>LINE連携申請</h3>
+                  <div class="ipad-card-list section" data-ipad-link-list></div>
+                </section>
+              </div>
+            </section>
 
-          <section class="panel" id="approval-ipad-panel" data-panel role="tabpanel" hidden>
-            <div class="grid grid--2">
-              <article class="notice-card">
-                <span class="status status--progress">家族報告</span>
-                <h2 class="section">山田 花子様</h2>
-                <p>予定どおり訪問が完了しました。次回は7月29日10時です。</p>
-                <div class="button-row">
-                  <button class="btn btn--primary" type="button" data-preview-action>確認して承認</button>
-                  <button class="btn btn--secondary" type="button" data-preview-action>修正を依頼</button>
+            <section class="panel ipad-panel" id="alert-ipad-panel" data-panel role="tabpanel" hidden>
+              <div class="section-heading">
+                <div>
+                  <p class="eyebrow">事業所内だけに表示</p>
+                  <h2>内部申し送り・指示書期限</h2>
                 </div>
-              </article>
-              <article class="notice-card">
-                <span class="status status--progress">LINE連携</span>
-                <h2 class="section">高橋 正様のご家族</h2>
-                <p>申請者：高橋 美咲様・続柄：長女</p>
-                <div class="button-row">
-                  <button class="btn btn--primary" type="button" data-preview-action>関係を確認</button>
-                </div>
-              </article>
-            </div>
-          </section>
-
-          <section class="panel" id="alert-ipad-panel" data-panel role="tabpanel" hidden>
-            <div class="grid grid--2">
-              <article class="notice-card">
-                <span class="status status--alert">状態変化</span>
-                <h2 class="section">スタッフ報告の確認</h2>
-                <p>内部申し送りを確認し、事業所の連絡手順に従って対応してください。</p>
-                <div class="button-row">
-                  <button class="btn btn--danger" type="button" data-preview-action>最優先で確認</button>
-                </div>
-              </article>
-              <article class="notice-card">
-                <span class="status status--alert">期限まで7日</span>
-                <h2 class="section">指示書期限</h2>
-                <p>田中 一郎様の指示書期限を確認してください。原本はDPROに保存しません。</p>
-                <div class="button-row">
-                  <button class="btn btn--secondary" type="button" data-preview-action>対応記録</button>
-                </div>
-              </article>
-            </div>
+              </div>
+              <div class="ipad-approval-columns section">
+                <section>
+                  <h3>未完了の内部申し送り</h3>
+                  <div class="ipad-card-list section" data-ipad-handoff-list></div>
+                </section>
+                <section>
+                  <h3>指示書期限30日以内</h3>
+                  <div class="ipad-card-list section" data-ipad-instruction-list></div>
+                </section>
+              </div>
+              <aside class="note note--warning section">
+                <strong>状態変化・緊急時</strong>
+                <p>この画面だけで対応を完了せず、事業所の手順に従って管理者・主治医・緊急連絡先へ連絡してください。</p>
+              </aside>
+            </section>
           </section>
         </div>
       </main>
 
       <footer class="footer">
         <p><span data-office-name>DPRO訪問看護ステーション（デモ）</span></p>
-        <p>Version <span data-version>NURSING-1</span></p>
+        <p>Version <span data-version>NURSING-9</span></p>
       </footer>
     </div>
     <div class="toast" data-toast role="status" aria-live="polite"></div>

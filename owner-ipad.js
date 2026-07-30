@@ -378,7 +378,7 @@
       resolved.className = "btn btn--primary";
       resolved.textContent = "対応済みにする";
       resolved.dataset.contactStatus = item.id;
-      resolved.dataset.nextStatus = "resolved";
+      resolved.dataset.nextStatus = "closed";
       row.append(resolved);
 
       const schedule = document.createElement("a");
@@ -619,10 +619,10 @@
     const nextStatus = button.dataset.nextStatus;
     const status = one(`[data-ipad-action-status='contact-${id}']`);
     const label =
-      nextStatus === "resolved" ? "対応済み" : "確認中";
+      nextStatus === "closed" ? "対応済み" : "確認中";
 
     if (
-      nextStatus === "resolved" &&
+      nextStatus === "closed" &&
       !window.confirm(
         "事業所内で必要な対応・連絡を完了したことを確認し、対応済みにしますか？"
       )

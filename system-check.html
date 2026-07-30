@@ -4,12 +4,14 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="theme-color" content="#0e5a5a">
-    <meta name="description" content="DPRO 訪問看護ステーション LINEの営業前システム検査画面です。">
-    <title>システム検査｜DPRO 訪問看護ステーション LINE</title>
+    <meta name="description" content="DPRO 訪問看護ステーション LINEの営業前・公開前最終検査画面です。">
+    <title>最終システム検査｜DPRO 訪問看護ステーション LINE</title>
     <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="system-check.css">
     <script src="config.js" defer></script>
     <script src="api.js" defer></script>
     <script src="app.js" defer></script>
+    <script src="system-check.js" defer></script>
   </head>
   <body>
     <a class="skip-link" href="#main">本文へ移動</a>
@@ -25,10 +27,8 @@
           </a>
           <div class="topbar__actions">
             <span class="demo-badge" data-demo-only>デモ環境</span>
-            <span class="role-badge">system-check</span>
-            <button class="nav-toggle" type="button" data-nav-toggle aria-expanded="false">
-              メニュー
-            </button>
+            <span class="role-badge">最終検査</span>
+            <button class="nav-toggle" type="button" data-nav-toggle aria-expanded="false">メニュー</button>
           </div>
         </div>
         <nav class="global-nav" data-global-nav aria-label="画面一覧">
@@ -43,56 +43,106 @@
         </nav>
       </header>
 
-      <main class="page" id="main">
-        <section class="hero">
+      <main class="page final-check-page" id="main">
+        <section class="hero final-check-hero">
           <div class="hero__content">
-            <p class="eyebrow">営業前・公開前の一括確認</p>
-            <h1>DPRO 訪問看護ステーション LINE システム検査</h1>
+            <p class="eyebrow">STEP NURSING-10・営業前最終確認</p>
+            <h1>訪問看護システム 最終検査</h1>
             <p class="lead">
-              STEP NURSING-4では、画面基盤に加えてWorker、Supabase、事業所設定、管理者認証、
-              LINE Login設定、本人・家族連携の接続状態を検査します。
+              NURSING-1～9で構築した画面、Worker、Supabase、LINE連携、
+              スタッフ運用、訪問管理、家族報告、管理者iPadを一括確認します。
             </p>
-            <form class="form-grid section" data-api-form data-system-check-form>
-              <div class="field field--full">
-                <label for="system-check-admin-code">管理コード</label>
-                <div class="input-with-action">
-                  <input
-                    id="system-check-admin-code"
-                    name="admin_code"
-                    type="password"
-                    inputmode="numeric"
-                    autocomplete="current-password"
-                    required
-                  >
-                  <button class="btn btn--secondary" type="button" data-clear-target="system-check-admin-code">
-                    削除
-                  </button>
-                </div>
-              </div>
-              <div class="field field--full">
-                <button class="btn btn--primary" type="submit" data-submit-button>
-                  NURSING-4一括検査を実行
+          </div>
+        </section>
+
+        <section class="section check-control-card" aria-labelledby="check-control-heading">
+          <div class="section-heading">
+            <div>
+              <p class="eyebrow">管理者認証</p>
+              <h2 id="check-control-heading">デモ準備・一括検査</h2>
+            </div>
+            <span class="status status--progress" data-final-check-badge>未実行</span>
+          </div>
+
+          <form class="form-grid section" data-nursing10-check-form>
+            <input
+              type="text"
+              name="username"
+              value="nursing-admin"
+              autocomplete="username"
+              tabindex="-1"
+              aria-hidden="true"
+              class="visually-hidden-credential"
+            >
+            <div class="field field--full">
+              <label for="nursing10-admin-code">管理コード</label>
+              <div class="input-with-action">
+                <input
+                  id="nursing10-admin-code"
+                  name="admin_code"
+                  type="password"
+                  inputmode="numeric"
+                  autocomplete="current-password"
+                  minlength="4"
+                  maxlength="128"
+                  required
+                >
+                <button class="btn btn--secondary" type="button" data-nursing10-clear-code>
+                  削除
                 </button>
-                <div class="form-status" data-system-check-status role="status" aria-live="polite" hidden></div>
               </div>
-            </form>
+              <p class="field__hint">デモ環境の管理コードは1234です。</p>
+            </div>
+            <div class="field field--full final-check-actions">
+              <button class="btn btn--secondary final-check-action" type="button" data-demo-prepare-button>
+                デモ検査データを準備
+              </button>
+              <button class="btn btn--primary final-check-action" type="submit" data-final-check-button>
+                NURSING-10一括検査を実行
+              </button>
+            </div>
+            <div class="field field--full">
+              <div class="form-status" data-demo-prepare-status role="status" aria-live="polite" hidden></div>
+              <div class="form-status" data-final-check-status role="status" aria-live="polite" hidden></div>
+            </div>
+          </form>
+
+          <aside class="note note--warning">
+            <strong>デモ準備の安全制限</strong>
+            <p>
+              デモ環境でのみ実行できます。既存データは削除せず、
+              DEMO-PATIENT-01と翌日の訪問予定が不足している場合だけ補います。
+            </p>
+          </aside>
+        </section>
+
+        <section class="section readiness-card" data-readiness-card aria-labelledby="readiness-heading">
+          <div class="readiness-card__icon" aria-hidden="true" data-readiness-icon>―</div>
+          <div>
+            <p class="eyebrow">最終判定</p>
+            <h2 id="readiness-heading" data-readiness-title>検査を実行してください</h2>
+            <p data-readiness-detail>
+              管理コードを入力し、必要に応じてデモデータを準備してから一括検査を実行します。
+            </p>
           </div>
         </section>
 
         <section class="section check-card" aria-labelledby="result-heading">
           <div class="section-heading">
             <div>
-              <p class="eyebrow">検査結果</p>
-              <h2 id="result-heading">ローカル・Worker・データベース</h2>
+              <p class="eyebrow">自動検査結果</p>
+              <h2 id="result-heading">フロント・Worker・データベース・LINE</h2>
             </div>
+            <span class="status status--progress" data-final-check-time>未実行</span>
           </div>
-          <div class="check-summary" role="group" aria-label="検査集計">
+
+          <div class="check-summary final-check-summary" role="group" aria-label="検査集計">
             <div class="check-summary__pass">
               <span>合格</span>
               <strong data-check-pass>0</strong>
             </div>
             <div class="check-summary__pending">
-              <span>保留</span>
+              <span>要確認</span>
               <strong data-check-pending>0</strong>
             </div>
             <div class="check-summary__fail">
@@ -100,56 +150,56 @@
               <strong data-check-fail>0</strong>
             </div>
           </div>
-          <ul class="check-list section" data-check-list>
-            <li>
-              <div>
-                <strong>検査を開始してください</strong>
-                <div class="visit-card__meta">管理コードを入力し「NURSING-4一括検査を実行」を押します。</div>
-              </div>
-              <span class="status status--progress">待機中</span>
-            </li>
-          </ul>
+
+          <div class="final-check-categories section" data-check-categories>
+            <div class="empty-state">
+              <strong>検査を開始してください</strong>
+              管理コードを入力し「NURSING-10一括検査を実行」を押します。
+            </div>
+          </div>
         </section>
 
-        <section class="section grid grid--2">
+        <section class="section grid grid--2 final-check-ledger">
           <article class="check-card">
             <p class="eyebrow">環境台帳</p>
             <h2>現在の設定</h2>
             <ul class="plain-list section">
               <li><strong>システム：</strong><span data-system-name>DPRO 訪問看護ステーション LINE</span></li>
-              <li><strong>バージョン：</strong><span data-version>NURSING-1</span></li>
+              <li><strong>バージョン：</strong><span data-version>NURSING-10</span></li>
               <li><strong>事業所：</strong><span data-office-name>DPRO訪問看護ステーション（デモ）</span></li>
               <li><strong>事業所コード：</strong><span data-office-code>dpro_home_nursing_demo</span></li>
               <li><strong>タイムゾーン：</strong>Asia/Tokyo</li>
-              <li><strong>production_guard：</strong>有効</li>
+              <li><strong>Supabase：</strong>liff-salon-reserve（一般系）</li>
             </ul>
           </article>
+
           <article class="check-card">
-            <p class="eyebrow">NURSING-4の判定範囲</p>
-            <h2>今回確認する接続</h2>
+            <p class="eyebrow">営業デモ確認</p>
+            <h2>実機で確認済みの流れ</h2>
             <ul class="plain-list section">
-              <li>Worker health・Supabase接続</li>
-              <li>必要テーブル・RLS・NURSING-2検査RPC</li>
-              <li>電話番号正規化</li>
-              <li>LINE Login設定・LINE連携承認API</li>
-              <li>本人・家族画面の公開範囲</li>
-              <li>production_guard・本番／デモ分離</li>
+              <li>訪問予定登録・スタッフ配置</li>
+              <li>スタッフログイン・訪問開始・終了</li>
+              <li>家族向け報告案・管理者公開承認</li>
+              <li>本人LINE連携申請・管理者承認</li>
+              <li>本人・家族ページの公開済み報告表示</li>
+              <li>家族連絡・管理者iPad対応完了</li>
             </ul>
           </article>
         </section>
 
         <section class="section note">
-          <strong>検査結果の扱い</strong>
+          <strong>正式運用前の確認</strong>
           <p>
-            LINE Login Channel IDが未設定の場合は「保留」と表示します。不合格とは分離し、
-            LINE DevelopersとLIFFの設定完了後に再検査してください。
+            本システムは電子カルテ、正式な訪問看護記録、保険請求を置き換えません。
+            本番公開時はワイルドカードCORSを使用せず、実事業所の緊急連絡先、
+            LINE Login、利用規約、プライバシーポリシーを確認してください。
           </p>
         </section>
       </main>
 
       <footer class="footer">
         <p><span data-office-name>DPRO訪問看護ステーション（デモ）</span></p>
-        <p>Version <span data-version>NURSING-1</span></p>
+        <p>Version <span data-version>NURSING-10</span></p>
       </footer>
     </div>
     <div class="toast" data-toast role="status" aria-live="polite"></div>

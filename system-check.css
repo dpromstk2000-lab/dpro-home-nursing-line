@@ -1,0 +1,178 @@
+.final-check-page {
+  width: min(100% - 32px, 1180px);
+}
+
+.final-check-hero {
+  padding: 36px 42px;
+}
+
+.check-control-card,
+.readiness-card {
+  padding: 24px;
+  border: 1px solid var(--nursing-border);
+  border-radius: var(--nursing-radius);
+  background: var(--nursing-white);
+  box-shadow: var(--nursing-shadow);
+}
+
+.final-check-actions {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.final-check-action {
+  min-height: 62px;
+  font-size: 1.02rem;
+}
+
+.visually-hidden-credential {
+  position: absolute;
+  left: -9999px;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+}
+
+.readiness-card {
+  display: grid;
+  grid-template-columns: 78px minmax(0, 1fr);
+  align-items: center;
+  gap: 20px;
+  border-width: 2px;
+}
+
+.readiness-card[data-state="ready"] {
+  border-color: #8bc9a5;
+  background: #f3fbf6;
+}
+
+.readiness-card[data-state="needs_review"] {
+  border-color: #e8c27c;
+  background: #fffaf0;
+}
+
+.readiness-card[data-state="blocked"] {
+  border-color: #e8a9a4;
+  background: #fff6f5;
+}
+
+.readiness-card__icon {
+  display: grid;
+  width: 70px;
+  height: 70px;
+  place-items: center;
+  border-radius: 999px;
+  color: var(--nursing-white);
+  background: var(--nursing-muted);
+  font-size: 2rem;
+  font-weight: 900;
+}
+
+.readiness-card[data-state="ready"] .readiness-card__icon {
+  background: #21875a;
+}
+
+.readiness-card[data-state="needs_review"] .readiness-card__icon {
+  background: #b87916;
+}
+
+.readiness-card[data-state="blocked"] .readiness-card__icon {
+  background: #b83e35;
+}
+
+.final-check-summary {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.final-check-categories {
+  display: grid;
+  gap: 22px;
+}
+
+.final-check-category {
+  overflow: hidden;
+  border: 1px solid var(--nursing-border);
+  border-radius: 16px;
+  background: var(--nursing-white);
+}
+
+.final-check-category__heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  padding: 16px 18px;
+  background: var(--nursing-teal-soft);
+}
+
+.final-check-category__heading h3 {
+  margin: 0;
+}
+
+.final-check-category__count {
+  display: inline-flex;
+  min-width: 34px;
+  min-height: 34px;
+  align-items: center;
+  justify-content: center;
+  border-radius: 999px;
+  color: var(--nursing-teal-dark);
+  background: var(--nursing-white);
+  font-weight: 900;
+}
+
+.final-check-list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.final-check-list li {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 18px;
+  padding: 15px 18px;
+  border-top: 1px solid var(--nursing-border);
+}
+
+.final-check-list li:first-child {
+  border-top: 0;
+}
+
+.final-check-list__text {
+  min-width: 0;
+}
+
+.final-check-list__detail {
+  margin-top: 5px;
+  color: var(--nursing-muted);
+  line-height: 1.55;
+}
+
+.final-check-ledger .check-card {
+  height: 100%;
+}
+
+@media (max-width: 720px) {
+  .final-check-page {
+    width: min(100% - 22px, 1180px);
+  }
+
+  .final-check-hero {
+    padding: 26px 21px;
+  }
+
+  .final-check-actions {
+    grid-template-columns: 1fr;
+  }
+
+  .readiness-card {
+    grid-template-columns: 1fr;
+  }
+
+  .final-check-list li {
+    flex-direction: column;
+  }
+}

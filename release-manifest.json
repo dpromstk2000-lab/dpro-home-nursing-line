@@ -1,0 +1,52 @@
+{
+  "system_name": "DPRO 訪問看護ステーション LINE",
+  "system_code": "NURSING",
+  "release_version": "NURSING-11-RELEASE-20260730",
+  "worker_version": "NURSING-10-WORKER-20260730",
+  "released_at": "2026-07-30T21:51:00+09:00",
+  "environment": "demo",
+  "office_code": "dpro_home_nursing_demo",
+  "time_zone": "Asia/Tokyo",
+  "supabase_project": "liff-salon-reserve",
+  "final_check": {
+    "checked_at": "2026-07-30T21:49:13+09:00",
+    "passed": 45,
+    "pending": 0,
+    "failed": 0,
+    "readiness": "ready_for_demo",
+    "label": "営業デモ実施可能"
+  },
+  "verified_flows": [
+    "新規相談・LINE連携申請",
+    "管理者による本人・家族LINE連携承認",
+    "訪問予定登録・30分単位・スタッフ配置",
+    "スタッフログイン・訪問開始・訪問終了",
+    "家族向け報告案・管理者公開承認",
+    "本人・家族ページの公開済み報告表示",
+    "家族からの非緊急連絡・管理者iPad対応完了",
+    "NURSING-10最終システム検査"
+  ],
+  "scope_notice": "訪問予定・現場連携・家族連絡を支援するシステムです。電子カルテ、正式な訪問看護記録、保険請求を置き換えません。",
+  "demo_credentials": {
+    "admin_code": "1234",
+    "patient_number": "DEMO-PATIENT-01",
+    "patient_phone": "09000000000",
+    "staff_access_code": "管理者PCで発行したコードを使用"
+  },
+  "urls": {
+    "public": "https://dpromstk2000-lab.github.io/dpro-home-nursing-line/",
+    "liff": "https://liff.line.me/2010876527-hXoFHt3R",
+    "member": "https://liff.line.me/2010876527-hXoFHt3R/member.html",
+    "staff": "https://dpromstk2000-lab.github.io/dpro-home-nursing-line/staff.html",
+    "owner": "https://dpromstk2000-lab.github.io/dpro-home-nursing-line/owner.html",
+    "owner_ipad": "https://dpromstk2000-lab.github.io/dpro-home-nursing-line/owner-ipad.html",
+    "system_check": "https://dpromstk2000-lab.github.io/dpro-home-nursing-line/system-check.html",
+    "worker_health": "https://dpro-home-nursing-line-api.dpromstk2000.workers.dev/health"
+  },
+  "sha256": {
+    "GitHub/config.js": "0cd0ee7e6e22c461228f163c827cd985e28dc0ce4e2032227c8e5c70835b6df8",
+    "Worker/worker.js": "fbc7cd12784e023d01651b5aec01166f1b6fdc0f2220acb8e68271528bb5f475",
+    "Documents/operation_sheet_pdf": "c63f9a6d7377d760a8c2e839d260bca7ea2c96b84ec2130c343e38149e9dcee9",
+    "Documents/completion_record_pdf": "098837e5d3976c717b93e84cf6a962f64ee0631fc9a1c3c65a2903dcffdae912"
+  }
+}

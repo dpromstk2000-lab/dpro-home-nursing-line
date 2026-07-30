@@ -3,7 +3,7 @@
 window.DPRO_CONFIG = Object.freeze({
   systemName: "DPRO 訪問看護ステーション LINE",
   systemCode: "NURSING",
-  version: "NURSING-8-R2-LIFF-RESUME-20260730",
+  version: "NURSING-8-R3-LIFF-PATH-20260730",
   timeZone: "Asia/Tokyo",
   environment: "demo",
   demoMode: true,
@@ -27,11 +27,7 @@ window.DPRO_CONFIG = Object.freeze({
   })
 });
 
-/*
- * NURSING-8-R2
- * 既存HTMLを変更せず、LINE認証後の申請再開処理とスマホ表示修正を読み込む。
- */
-(function loadNursing8R2Assets() {
+(function loadNursing8Assets() {
   const current = document.currentScript?.src || window.location.href;
   const base = new URL(".", current);
 
@@ -47,6 +43,14 @@ window.DPRO_CONFIG = Object.freeze({
     const script = document.createElement("script");
     script.id = "nursing-8-r2-line-link-js";
     script.src = new URL("line-link-r2.js", base).href;
+    script.async = false;
+    document.head.append(script);
+  }
+
+  if (!document.getElementById("nursing-8-r3-liff-route-js")) {
+    const script = document.createElement("script");
+    script.id = "nursing-8-r3-liff-route-js";
+    script.src = new URL("liff-route-r3.js", base).href;
     script.async = false;
     document.head.append(script);
   }

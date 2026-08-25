@@ -241,19 +241,33 @@ async function runtimeQa() {
 
 }
 
+async function checkpoint(label = '') {
+  result.checkpoint = { label, at: new Date().toISOString() };
+  await writeFile(`${OUT}/qa-result.partial.json`, JSON.stringify(result, null, 2));
+}
+
 async function browserQa() {
   for (const p of pages) {
-    const availability = await waitForHttp(p.url, 200, p.name === 'a4-html' ? 24 : 8);
+    const availability = await waitForHttp(p.url, 200, p.name === 'a4-html' ? 12 : 5);
     assert(availability?.status === 200, 'url', `${p.name} did not become HTTP 200`, { url: p.url, availability });
   }
-  const pdf = await waitForHttp(pdfUrl, 200, 24);
+  const pdf = await waitForHttp(pdfUrl, 200, 12);
   result.browser.push({ page: 'a4-pdf', viewport: 'http-only', url: pdfUrl, status: pdf?.status, finalUrl: pdf?.finalUrl });
   assert(pdf?.status === 200, 'url', 'A4 PDF is not HTTP 200', { pdf });
+  await checkpoint('public-url-matrix-complete');
 
   const browser = await chromium.launch({ headless: true });
   try {
     for (const vp of viewports) {
-      const context = await browser.newContext({ viewport: { width: vp.width, height: vp.height }, locale: 'ja-JP', timezoneId: 'Asia/Tokyo' });
+      const context = await browser.newContext({
+        viewport: { width: vp.width, height: vp.height },
+        locale: 'ja-JP',
+        timezoneId: 'Asia/Tokyo',
+        serviceWorkers: 'block'
+      });
+      context.setDefaultTimeout(8000);
+      context.setDefaultNavigationTimeout(12000);
+
       for (const p of pages) {
         const page = await context.newPage();
         const pageErrors = [];
@@ -263,9 +277,12 @@ async function browserQa() {
         page.on('console', msg => { if (msg.type() === 'error') consoleErrors.push(msg.text()); });
         page.on('requestfailed', req => failedRequests.push({ url: req.url(), error: req.failure()?.errorText || 'unknown' }));
         let response;
+        const label = `${p.name}/${vp.name}`;
+        console.log(`[BROWSER] START ${label}`);
         try {
-          response = await page.goto(p.url, { waitUntil: 'domcontentloaded', timeout: 45000 });
-          await page.waitForTimeout(1200);
+          response = await page.goto(p.url, { waitUntil: 'commit', timeout: 12000 });
+          await page.waitForLoadState('domcontentloaded', { timeout: 5000 }).catch(() => {});
+          await page.waitForTimeout(1000);
           const metrics = await page.evaluate(() => {
             const html = document.documentElement;
             const body = document.body;
@@ -307,7 +324,7 @@ async function browserQa() {
             blockingTechnicalTextHits: techHits
           };
           result.browser.push(entry);
-          await page.screenshot({ path: `${OUT}/screens/${p.name}-${vp.name}.png`, fullPage: false });
+          await page.screenshot({ path: `${OUT}/screens/${p.name}-${vp.name}.png`, fullPage: false, timeout: 8000 });
           if (entry.status !== 200) recordFailure('browser', `${p.name}/${vp.name} HTTP ${entry.status}`, { entry });
           if (entry.overflow) recordFailure('browser', `${p.name}/${vp.name} horizontal overflow`, { entry });
           if (pageErrors.length) recordFailure('browser', `${p.name}/${vp.name} pageerror`, { pageErrors });
@@ -315,21 +332,25 @@ async function browserQa() {
           if (failedRequests.length) recordFailure('browser', `${p.name}/${vp.name} failed requests`, { failedRequests });
           if (secretHits.length) recordFailure('security', `${p.name}/${vp.name} secret marker exposure`, { secretHits });
           if (techHits.length) recordFailure('browser', `${p.name}/${vp.name} blocking technical text`, { techHits });
+          console.log(`[BROWSER] DONE ${label}`);
         } catch (error) {
           recordFailure('browser', `${p.name}/${vp.name} navigation/test exception`, { error: String(error) });
+          console.log(`[BROWSER] ERROR ${label}: ${String(error)}`);
         } finally {
-          await page.close();
+          await checkpoint(`browser-${label}`);
+          await page.close({ runBeforeUnload: false }).catch(() => {});
         }
       }
-      await context.close();
+      await context.close().catch(() => {});
     }
   } finally {
-    await browser.close();
+    await browser.close().catch(() => {});
   }
 }
 
 try {
   await runtimeQa();
+  await checkpoint('runtime-complete');
 } catch (error) {
   recordFailure('runtime-fatal', String(error));
 }

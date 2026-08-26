@@ -202,8 +202,25 @@ async function runtimeQa() {
   const staffLogin1 = await jsonRequest('/v1/staff/login', {
     method: 'POST', body: { staff_code: 'DEMO-MANAGER', access_code: temp1, device_label: 'R2 QA GitHub Actions' }
   });
-  result.runtime.push({ test: 'staff-login-allow', status: staffLogin1.status });
+  const staffLogin1ExpiresAt = staffLogin1.data?.expires_at || null;
+  const staffLogin1TtlSeconds = staffLogin1ExpiresAt
+    ? Math.ceil((Date.parse(staffLogin1ExpiresAt) - Date.now()) / 1000)
+    : null;
+  result.runtime.push({
+    test: 'staff-login-allow-ttl',
+    status: staffLogin1.status,
+    expires_at: staffLogin1ExpiresAt,
+    ttl_seconds_remaining: staffLogin1TtlSeconds
+  });
   assert(staffLogin1.status === 200 && staffLogin1.data?.token, 'staff', 'Staff allow-login failed');
+  assert(
+    Number.isFinite(staffLogin1TtlSeconds) &&
+      staffLogin1TtlSeconds > 0 &&
+      staffLogin1TtlSeconds <= 1800,
+    'staff',
+    'Fresh staff session TTL exceeds Product READY 1800-second maximum',
+    { expires_at: staffLogin1ExpiresAt, ttl_seconds_remaining: staffLogin1TtlSeconds }
+  );
   const token1 = staffLogin1.data.token;
 
   const today1 = await jsonRequest('/v1/staff/today', { token: token1 });
@@ -217,8 +234,13 @@ async function runtimeQa() {
   assert(issue2.status >= 200 && issue2.status < 300, 'staff', 'Second access-code issue/revoke failed');
 
   const staleAfterReissue = await jsonRequest('/v1/staff/today', { token: token1 });
-  result.runtime.push({ test: 'staff-stale-after-reissue-deny', status: staleAfterReissue.status });
-  assert([401, 403].includes(staleAfterReissue.status), 'staff', 'Old token remained valid after access-code reissue', { status: staleAfterReissue.status });
+  result.runtime.push({ test: 'staff-after-access-code-change-old-token-401', status: staleAfterReissue.status });
+  assert(
+    staleAfterReissue.status === 401,
+    'staff',
+    'Old token was not HTTP 401 after access-code reissue',
+    { status: staleAfterReissue.status }
+  );
 
   const oldCodeLogin = await jsonRequest('/v1/staff/login', {
     method: 'POST', body: { staff_code: 'DEMO-MANAGER', access_code: temp1, device_label: 'R2 QA old-code negative' }
@@ -236,6 +258,15 @@ async function runtimeQa() {
   const logout = await jsonRequest('/v1/staff/logout', { method: 'POST', token: token2, body: {} });
   result.runtime.push({ test: 'staff-logout', status: logout.status });
   assert(logout.status >= 200 && logout.status < 300, 'staff', 'Staff logout failed');
+
+  const staleAfterLogout = await jsonRequest('/v1/staff/today', { token: token2 });
+  result.runtime.push({ test: 'staff-after-logout-old-token-401', status: staleAfterLogout.status });
+  assert(
+    staleAfterLogout.status === 401,
+    'staff',
+    'Logged-out staff token was not HTTP 401',
+    { status: staleAfterLogout.status }
+  );
 
   // The temporary plaintext codes are never logged. R2 controller restores the pre-QA DB hash after the workflow.
 

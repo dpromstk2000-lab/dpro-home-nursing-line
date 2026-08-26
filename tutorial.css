@@ -1,0 +1,165 @@
+/* DPRO TUTORIAL STANDARD V1.1 / NURSING R3-R4 */
+:root {
+  --dpro-tutorial-z: 2147483000;
+  --dpro-tutorial-ink: #17324d;
+  --dpro-tutorial-muted: #5d7182;
+  --dpro-tutorial-brand: #0e5a5a;
+  --dpro-tutorial-soft: #e8f3f1;
+  --dpro-tutorial-line: #cddbd8;
+  --dpro-tutorial-bg: #ffffff;
+  --dpro-tutorial-warn: #9a5800;
+}
+
+.dpro-tutorial-launcher {
+  position: fixed;
+  z-index: var(--dpro-tutorial-z);
+  left: max(12px, env(safe-area-inset-left));
+  bottom: max(12px, env(safe-area-inset-bottom));
+  min-height: 48px;
+  max-width: calc(100vw - 24px);
+  padding: 10px 16px;
+  border: 2px solid var(--dpro-tutorial-brand);
+  border-radius: 999px;
+  color: #fff;
+  background: var(--dpro-tutorial-brand);
+  box-shadow: 0 10px 28px rgba(23, 50, 77, .24);
+  cursor: pointer;
+  font: 900 15px/1.25 -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans JP", sans-serif;
+  touch-action: manipulation;
+}
+
+.dpro-tutorial-launcher:focus-visible,
+.dpro-tutorial-card button:focus-visible,
+.dpro-tutorial-card a:focus-visible,
+.dpro-tutorial-drag-handle:focus-visible {
+  outline: 4px solid rgba(36, 92, 138, .28);
+  outline-offset: 3px;
+}
+
+.dpro-tutorial-backdrop {
+  position: fixed;
+  z-index: calc(var(--dpro-tutorial-z) - 2);
+  inset: 0;
+  pointer-events: none;
+  background: rgba(8, 33, 46, .06);
+}
+
+.dpro-tutorial-highlight {
+  position: fixed;
+  z-index: calc(var(--dpro-tutorial-z) - 1);
+  border: 4px solid #0e5a5a;
+  border-radius: 14px;
+  box-shadow: 0 0 0 9999px rgba(8, 33, 46, .10), 0 0 0 5px rgba(255,255,255,.8);
+  pointer-events: none;
+  transition: top 120ms ease, left 120ms ease, width 120ms ease, height 120ms ease;
+}
+
+.dpro-tutorial-card {
+  position: fixed;
+  z-index: calc(var(--dpro-tutorial-z) + 1);
+  width: min(430px, calc(100vw - 24px));
+  max-height: min(82vh, 720px);
+  overflow: auto;
+  overscroll-behavior: contain;
+  border: 1px solid var(--dpro-tutorial-line);
+  border-radius: 20px;
+  color: var(--dpro-tutorial-ink);
+  background: var(--dpro-tutorial-bg);
+  box-shadow: 0 22px 60px rgba(23, 50, 77, .30);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans JP", "Yu Gothic", Meiryo, sans-serif;
+  font-size: 16px;
+  line-height: 1.6;
+}
+
+.dpro-tutorial-card[hidden],
+.dpro-tutorial-highlight[hidden],
+.dpro-tutorial-backdrop[hidden] { display: none !important; }
+
+.dpro-tutorial-drag-handle {
+  display: flex;
+  min-height: 44px;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 9px 14px;
+  border: 0;
+  border-bottom: 1px solid var(--dpro-tutorial-line);
+  border-radius: 20px 20px 0 0;
+  color: var(--dpro-tutorial-muted);
+  background: #f7faf8;
+  cursor: grab;
+  user-select: none;
+  touch-action: none;
+  font-size: 13px;
+  font-weight: 900;
+}
+
+.dpro-tutorial-drag-handle:active { cursor: grabbing; }
+.dpro-tutorial-drag-handle::after { content: "⠿"; font-size: 20px; letter-spacing: .08em; }
+
+.dpro-tutorial-body { padding: 18px; }
+.dpro-tutorial-eyebrow { margin: 0 0 5px; color: var(--dpro-tutorial-brand); font-size: 12px; font-weight: 900; letter-spacing: .08em; }
+.dpro-tutorial-card h2 { margin: 0; color: var(--dpro-tutorial-ink); font-size: 21px; line-height: 1.35; }
+.dpro-tutorial-copy { margin: 12px 0 0; color: #32495b; }
+.dpro-tutorial-fallback { margin: 12px 0 0; padding: 11px 12px; border-left: 4px solid var(--dpro-tutorial-warn); border-radius: 8px; color: #6d4300; background: #fff3d9; font-size: 14px; }
+.dpro-tutorial-route { margin: 10px 0 0; color: var(--dpro-tutorial-muted); font-size: 13px; }
+.dpro-tutorial-progress { margin: 14px 0 0; color: var(--dpro-tutorial-muted); font-size: 13px; font-weight: 800; }
+
+.dpro-tutorial-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 16px;
+}
+
+.dpro-tutorial-card button,
+.dpro-tutorial-card a {
+  min-height: 44px;
+  padding: 9px 13px;
+  border: 1px solid var(--dpro-tutorial-brand);
+  border-radius: 11px;
+  color: var(--dpro-tutorial-brand);
+  background: #fff;
+  cursor: pointer;
+  font: 900 14px/1.25 inherit;
+  text-decoration: none;
+  touch-action: manipulation;
+}
+
+.dpro-tutorial-card .dpro-tutorial-primary { color: #fff; background: var(--dpro-tutorial-brand); }
+.dpro-tutorial-card .dpro-tutorial-quiet { border-color: var(--dpro-tutorial-line); color: var(--dpro-tutorial-muted); }
+.dpro-tutorial-card button[disabled] { cursor: not-allowed; opacity: .48; }
+
+.dpro-guide-home h2 { margin-bottom: 4px; }
+.dpro-guide-intro { margin: 6px 0 14px; color: var(--dpro-tutorial-muted); font-size: 14px; }
+.dpro-guide-category-list { display: grid; gap: 10px; margin-top: 14px; }
+.dpro-guide-category { border: 1px solid var(--dpro-tutorial-line); border-radius: 13px; overflow: hidden; background: #fff; }
+.dpro-guide-category[open] { border-color: #8eb9b4; }
+.dpro-guide-category summary { padding: 12px 13px; cursor: pointer; font-weight: 900; background: #f7faf8; }
+.dpro-guide-category.is-recommended summary::after { content: " この画面におすすめ"; margin-left: 6px; color: var(--dpro-tutorial-brand); font-size: 11px; }
+.dpro-guide-items { margin: 0; padding: 10px 14px 13px 32px; color: #32495b; }
+.dpro-guide-items li + li { margin-top: 5px; }
+.dpro-guide-meta { display: block; margin-top: 2px; color: var(--dpro-tutorial-muted); font-size: 11px; }
+
+@media (max-width: 520px) {
+  .dpro-tutorial-card {
+    width: calc(100vw - 20px);
+    max-height: calc(100vh - 96px);
+    border-radius: 17px;
+  }
+  .dpro-tutorial-drag-handle { border-radius: 17px 17px 0 0; }
+  .dpro-tutorial-body { padding: 16px; }
+  .dpro-tutorial-actions { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .dpro-tutorial-actions > * { width: 100%; }
+}
+
+@media (max-width: 390px) {
+  .dpro-tutorial-launcher { left: 10px; bottom: 10px; max-width: calc(100vw - 20px); }
+  .dpro-tutorial-card { width: calc(100vw - 16px); }
+  .dpro-tutorial-body { padding: 14px; }
+  .dpro-tutorial-actions { grid-template-columns: 1fr; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .dpro-tutorial-highlight { transition: none; }
+}

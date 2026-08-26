@@ -34,7 +34,9 @@ window.DPRO_CONFIG = Object.freeze({
   const assets = [
     ["nursing-8-r2-mobile-css", "link", "mobile-r2.css"],
     ["nursing-8-r2-line-link-js", "script", "line-link-r2.js"],
-    ["nursing-8-r3-liff-route-js", "script", "liff-route-r3.js"]
+    ["nursing-8-r3-liff-route-js", "script", "liff-route-r3.js"],
+    ["dpro-tutorial-nursing-v1-1-css", "link", "tutorial.css"],
+    ["dpro-tutorial-nursing-v1-1-js", "script", "tutorial.js"]
   ];
 
   assets.forEach(([id, type, file]) => {

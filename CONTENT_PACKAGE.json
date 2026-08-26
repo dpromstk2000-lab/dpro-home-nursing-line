@@ -1,0 +1,520 @@
+{
+  "schema_version": "DPRO_TUTORIAL_CONTENT_PACKAGE_V1.1",
+  "standard": "DPRO TUTORIAL STANDARD V1.1 / ACTIVE / LOCKED",
+  "phase": "R2_INFORMATION_DESIGN",
+  "system": {
+    "system_code": "NURSING",
+    "system_name": "DPRO 訪問看護ステーション LINE",
+    "repository": "dpromstk2000-lab/dpro-home-nursing-line",
+    "branch": "main",
+    "source_sha": "1a5e97502136e396a0ff043bdc030447df62abfd",
+    "pages_root": "https://dpromstk2000-lab.github.io/dpro-home-nursing-line/",
+    "product_site": "https://dpromstk2000-lab.github.io/dpro-line-systems-site/lp-homenursing.html",
+    "environment": "demo",
+    "production_guard": true,
+    "api_base_url": "https://dpro-home-nursing-line-api.dpromstk2000.workers.dev"
+  },
+  "source_lock": {
+    "observed_sha_at_start_package": "1a5e97502136e396a0ff043bdc030447df62abfd",
+    "current_main_sha_at_r0": "1a5e97502136e396a0ff043bdc030447df62abfd",
+    "main_advanced_since_package": false,
+    "rollback_performed": false,
+    "locked_at": "2026-08-26T11:53:00+09:00",
+    "inventory_file_count": 29
+  },
+  "role_map": [
+    {
+      "role": "public_consultation",
+      "label": "相談窓口",
+      "route": "index.html",
+      "auth": "none for consultation; LINE/LIFF required for link request",
+      "scope": "新規相談・紹介受付、利用中本人/家族のLINE連携申請"
+    },
+    {
+      "role": "member_family",
+      "label": "本人・家族",
+      "route": "member.html",
+      "auth": "LIFF + approved link",
+      "scope": "承認済み訪問予定、公開済み家族報告、非緊急連絡"
+    },
+    {
+      "role": "staff",
+      "label": "スタッフ",
+      "route": "staff.html",
+      "auth": "staff_code + access_code; sessionStorage session",
+      "scope": "本人に割り当てられた本日の訪問、詳細、訪問開始/終了、内部申し送り、家族報告案"
+    },
+    {
+      "role": "owner_pc",
+      "label": "管理者PC",
+      "route": "owner.html",
+      "auth": "admin_code",
+      "scope": "ダッシュボード、訪問予定・配置、スタッフ管理、家族報告承認、LINE連携承認、利用者検索"
+    },
+    {
+      "role": "owner_ipad",
+      "label": "管理者iPad",
+      "route": "owner-ipad.html",
+      "auth": "admin_code",
+      "scope": "当日訪問、変更・連絡、承認、要確認"
+    },
+    {
+      "role": "diagnostic",
+      "label": "システム検査",
+      "route": "system-check.html",
+      "auth": "admin_code",
+      "scope": "運用/診断専用。Tutorial本文では対象外"
+    }
+  ],
+  "public_routes": [
+    {
+      "route": "index.html",
+      "tutorial_safe": true,
+      "notes": "閲覧・セクション移動のみ。相談送信/LINE連携申請はmutationなので押さない"
+    },
+    {
+      "route": "member.html",
+      "tutorial_safe": true,
+      "notes": "認証境界と公開情報範囲を説明。連絡送信は押さない"
+    },
+    {
+      "route": "staff.html",
+      "tutorial_safe": true,
+      "notes": "ログイン境界と割当/詳細を説明。訪問開始/終了・申し送り保存・報告保存は押さない"
+    },
+    {
+      "route": "owner.html",
+      "tutorial_safe": true,
+      "notes": "タブ/パネルの説明と閲覧のみ。登録/発行/承認/更新は押さない"
+    },
+    {
+      "route": "owner-ipad.html",
+      "tutorial_safe": true,
+      "notes": "タブ/状況説明のみ。対応開始/対応済み/公開/連携承認は押さない"
+    },
+    {
+      "route": "demo-guide.html",
+      "tutorial_safe": true,
+      "notes": "既存の公開操作デモ案内。Guide Center/product-site連携の参考"
+    },
+    {
+      "route": "system-check.html",
+      "tutorial_safe": false,
+      "notes": "STANDARD V1.1 safetyによりraw diagnostics/system-checkをTutorial本文へ露出しない"
+    }
+  ],
+  "safety": {
+    "no_business_mutation": true,
+    "no_db_worker_api_auth_role_permission_feature_flag_change": true,
+    "never_auto_press": [
+      "相談を送信する",
+      "LINE連携を申請する",
+      "事業所へ送信する",
+      "訪問開始",
+      "訪問終了",
+      "状態変化を記録する",
+      "承認待ちとして保存する",
+      "訪問予定とスタッフ配置を登録する",
+      "デモ利用者を準備",
+      "スタッフを登録する",
+      "アクセスコード発行/再発行",
+      "確認して家族へ公開",
+      "照合済みとして承認",
+      "対応開始",
+      "対応済みにする",
+      "system-check/demo_prepare/raw diagnostic controls"
+    ],
+    "sensitive_data_policy": [
+      "実在する氏名、住所、電話番号、病名、病歴、保険情報、正式な看護記録をTutorial本文/デモ例へ複製しない",
+      "内部申し送りの実データ本文をTutorialへ取り込まない",
+      "家族公開報告はUI概念のみ説明し、実利用者の文章を複製しない",
+      "緊急症状・状態変化はTutorial操作で完結させず、画面既存の緊急案内を優先する"
+    ]
+  },
+  "first10": [
+    {
+      "step": 1,
+      "id": "NURSING-F10-01",
+      "title": "画面と役割を確認",
+      "role": "all",
+      "route": "index.html",
+      "target_selectors": [
+        ".topbar",
+        "[data-global-nav]"
+      ],
+      "entry": "Pages root / index.html",
+      "copy": "このシステムは相談窓口、本人・家族、スタッフ、管理者PC、管理者iPadで役割が分かれています。まず自分の役割の画面を確認します。",
+      "safe_action": "observe/navigation only",
+      "never_press": [],
+      "fallback": "画面上部が見つからない場合は、各画面名を一覧で説明し、現在ページのrole-badgeを案内する。"
+    },
+    {
+      "step": 2,
+      "id": "NURSING-F10-02",
+      "title": "緊急時の安全ルール",
+      "role": "public/member/staff",
+      "route": "index.html",
+      "target_selectors": [
+        ".emergency-banner"
+      ],
+      "entry": "index.html top",
+      "copy": "緊急症状や緊急連絡はLINE入力だけで完了しません。事業所の緊急連絡先または119への電話を優先します。",
+      "safe_action": "observe only",
+      "never_press": [],
+      "fallback": "緊急バナーがない場合も同じ安全文をTutorialカード内に表示する。"
+    },
+    {
+      "step": 3,
+      "id": "NURSING-F10-03",
+      "title": "新規相談の入口",
+      "role": "public_consultation",
+      "route": "index.html#consultation",
+      "target_selectors": [
+        "#consultation",
+        "[data-consultation-form]"
+      ],
+      "entry": "hero button or anchor #consultation",
+      "copy": "初めての相談・紹介はここからです。詳しい病名や医療情報ではなく、連絡に必要な最小限の内容だけを扱います。",
+      "safe_action": "scroll/highlight only",
+      "never_press": [
+        "[data-consultation-form] [data-submit-button]"
+      ],
+      "fallback": "#consultationがない場合は『新規相談・紹介受付』見出しを探し、見つからなければ説明カードだけ表示する。"
+    },
+    {
+      "step": 4,
+      "id": "NURSING-F10-04",
+      "title": "利用中の方のLINE連携",
+      "role": "public_consultation/member_family",
+      "route": "index.html#line-link",
+      "target_selectors": [
+        "#line-link",
+        "[data-line-link-form]"
+      ],
+      "entry": "hero button or anchor #line-link",
+      "copy": "利用中の本人・家族はLINE連携を申請し、事業所の承認後に情報が表示されます。承認前は利用者情報を表示しません。",
+      "safe_action": "scroll/highlight only",
+      "never_press": [
+        "[data-line-link-form] [data-submit-button]"
+      ],
+      "fallback": "#line-linkがない場合は本人・家族ページの認証境界説明へ進む。"
+    },
+    {
+      "step": 5,
+      "id": "NURSING-F10-05",
+      "title": "本人・家族の認証境界",
+      "role": "member_family",
+      "route": "member.html",
+      "target_selectors": [
+        "[data-member-auth-state]",
+        "[data-member-link-status]"
+      ],
+      "entry": "member.html / LIFF route",
+      "copy": "本人・家族ページはLINE認証と事業所の連携承認が前提です。未承認時は利用者情報を表示しません。",
+      "safe_action": "observe only",
+      "never_press": [],
+      "fallback": "認証状態DOMがない場合は、未認証/未承認では情報非表示であることを説明する。"
+    },
+    {
+      "step": 6,
+      "id": "NURSING-F10-06",
+      "title": "訪問予定と公開済み報告",
+      "role": "member_family",
+      "route": "member.html#next-visits",
+      "target_selectors": [
+        "#next-visits",
+        "[data-member-visits]",
+        "[data-member-reports]"
+      ],
+      "entry": "member hero / #next-visits",
+      "copy": "承認済みの本人・家族には次回訪問と、管理者が家族公開を承認した報告だけが表示されます。内部申し送りや正式な看護記録は表示されません。",
+      "safe_action": "observe only",
+      "never_press": [],
+      "fallback": "認証前でリストが空でも、空状態メッセージを対象に公開範囲を説明する。"
+    },
+    {
+      "step": 7,
+      "id": "NURSING-F10-07",
+      "title": "非緊急の変更・相談",
+      "role": "member_family",
+      "route": "member.html#contact-request",
+      "target_selectors": [
+        "#contact-request",
+        "[data-member-contact-form]"
+      ],
+      "entry": "member hero / #contact-request",
+      "copy": "予定変更・欠席・折り返し希望は非緊急連絡として送れます。ただし送信しただけでは訪問予定は変更されません。",
+      "safe_action": "scroll/highlight only",
+      "never_press": [
+        "[data-member-contact-form] [data-submit-button]"
+      ],
+      "fallback": "フォームが使えない状態なら、送信ボタンを操作せず『事業所確認後に確定』だけを説明する。"
+    },
+    {
+      "step": 8,
+      "id": "NURSING-F10-08",
+      "title": "スタッフの本日の担当",
+      "role": "staff",
+      "route": "staff.html",
+      "target_selectors": [
+        "[data-staff-login-view]",
+        "[data-staff-visits]",
+        "[data-selected-visit-section]"
+      ],
+      "entry": "staff.html",
+      "copy": "スタッフは事業所発行コードでログインし、自分に割り当てられた本日の訪問だけを確認します。正式な訪問看護記録の代わりではありません。",
+      "safe_action": "observe/select detail only after auth",
+      "never_press": [
+        "[data-visit-action='started']",
+        "[data-visit-action='completed']",
+        "[data-condition-submit]",
+        "[data-family-report-submit]"
+      ],
+      "fallback": "未ログイン時はログイン画面を対象に役割境界だけ説明し、認証情報の入力や送信はTutorialが代行しない。"
+    },
+    {
+      "step": 9,
+      "id": "NURSING-F10-09",
+      "title": "管理者PCの管理メニュー",
+      "role": "owner_pc",
+      "route": "owner.html",
+      "target_selectors": [
+        "[data-owner-login-view]",
+        ".side-menu",
+        "[data-panel-target]"
+      ],
+      "entry": "owner.html",
+      "copy": "管理者PCはダッシュボード、訪問予定・配置、スタッフ管理、家族報告承認、LINE連携承認、利用者検索に分かれています。Tutorialはメニュー位置と意味だけを案内します。",
+      "safe_action": "tab/panel navigation only after auth",
+      "never_press": [
+        "[data-prepare-demo-patient]",
+        "[data-visit-create-button]",
+        "[data-staff-create-button]",
+        "[data-approve-report]",
+        "[data-approve-link]"
+      ],
+      "fallback": "未認証時は管理者ログインカードを対象にし、管理コード入力/送信はTutorialが代行しない。"
+    },
+    {
+      "step": 10,
+      "id": "NURSING-F10-10",
+      "title": "管理者iPadの当日運用",
+      "role": "owner_ipad",
+      "route": "owner-ipad.html",
+      "target_selectors": [
+        ".ipad-tabs",
+        "[data-panel-target='today-ipad-panel']",
+        "[data-panel-target='approval-ipad-panel']",
+        "[data-panel-target='alert-ipad-panel']"
+      ],
+      "entry": "owner-ipad.html",
+      "copy": "iPadでは本日の訪問、変更・連絡、承認、要確認を当日運用向けに確認できます。状態変更や公開承認は業務操作なのでTutorialは押しません。",
+      "safe_action": "tab navigation/observe only",
+      "never_press": [
+        "[data-contact-status]",
+        "[data-approve-report]",
+        "[data-approve-link]"
+      ],
+      "fallback": "未認証時はiPadログインカードと4機能の説明をTutorialカード内に表示し、認証は利用者本人に任せる。"
+    }
+  ],
+  "guide_center": {
+    "categories": [
+      {
+        "id": "GC-01",
+        "title": "最初に見る：役割と画面",
+        "items": [
+          "画面一覧",
+          "相談窓口/本人・家族/スタッフ/管理者の違い",
+          "緊急時のルール"
+        ]
+      },
+      {
+        "id": "GC-02",
+        "title": "新規相談・LINE連携",
+        "items": [
+          "新規相談の入口",
+          "入力してよい情報/避ける情報",
+          "LINE連携申請と承認待ち"
+        ]
+      },
+      {
+        "id": "GC-03",
+        "title": "本人・家族ポータル",
+        "items": [
+          "認証・連携承認",
+          "訪問予定",
+          "公開済み報告",
+          "非緊急連絡"
+        ]
+      },
+      {
+        "id": "GC-04",
+        "title": "スタッフ当日訪問",
+        "items": [
+          "スタッフログイン",
+          "本日の割当",
+          "詳細確認",
+          "訪問開始/終了の意味",
+          "内部申し送りと家族報告案の違い"
+        ]
+      },
+      {
+        "id": "GC-05",
+        "title": "管理者PC",
+        "items": [
+          "ダッシュボード",
+          "訪問予定・配置",
+          "スタッフ管理",
+          "家族報告承認",
+          "LINE連携承認",
+          "利用者検索"
+        ]
+      },
+      {
+        "id": "GC-06",
+        "title": "管理者iPad",
+        "items": [
+          "本日の訪問",
+          "変更・連絡",
+          "承認",
+          "要確認"
+        ]
+      },
+      {
+        "id": "GC-07",
+        "title": "安全・個人情報",
+        "items": [
+          "緊急時",
+          "医療情報をLINEに書かない",
+          "内部情報と家族公開情報の分離",
+          "正式記録/請求の非代替"
+        ]
+      },
+      {
+        "id": "GC-08",
+        "title": "ログイン・表示トラブル",
+        "items": [
+          "未認証/未承認",
+          "スタッフセッション",
+          "管理者セッション",
+          "スマホメニュー",
+          "LIFF設定境界"
+        ]
+      }
+    ]
+  },
+  "print_manual_mapping": [
+    {
+      "manual_id": "PM-01",
+      "title": "利用者・家族向け 操作ガイド",
+      "source_categories": [
+        "GC-01",
+        "GC-02",
+        "GC-03",
+        "GC-07"
+      ]
+    },
+    {
+      "manual_id": "PM-02",
+      "title": "訪問スタッフ向け 当日操作ガイド",
+      "source_categories": [
+        "GC-01",
+        "GC-04",
+        "GC-07",
+        "GC-08"
+      ]
+    },
+    {
+      "manual_id": "PM-03",
+      "title": "管理者PC 運用ガイド",
+      "source_categories": [
+        "GC-01",
+        "GC-05",
+        "GC-07",
+        "GC-08"
+      ]
+    },
+    {
+      "manual_id": "PM-04",
+      "title": "管理者iPad 当日運用ガイド",
+      "source_categories": [
+        "GC-01",
+        "GC-06",
+        "GC-07",
+        "GC-08"
+      ]
+    }
+  ],
+  "integration_plan": {
+    "canonical_source": "CONTENT_PACKAGE.json",
+    "first10": "R3 renders from first10[]; do not hard-code independent copy",
+    "guide_center": "R4 derives categories/items from guide_center.categories",
+    "print_manuals": "R5 derives manuals from print_manual_mapping + same canonical copy",
+    "product_site": "R6 may link Guide/Print entry from existing product page and demo-guide; no product-site change in R2",
+    "existing_demo_guide": "demo-guide.html remains an existing public demo route and evidence source; do not overwrite in R2"
+  },
+  "responsive_design": {
+    "source_evidence": "styles.css collapses grids/forms at <=720px and side-menu/tablet tabs at <=430px; body overflow-x hidden; mobile-r2.css fixes LINE browser nav toggle",
+    "r3_requirement": "First10 card must be draggable with dedicated handle, pointer/mouse/touch, viewport clamp, buttons/links/inputs excluded as drag starts, independent highlight, keyboard completion",
+    "390px_rule": "horizontal overflow must equal 0 in R3/R6 runtime QA; R2 only verifies source-level responsive guards"
+  },
+  "evidence": [
+    {
+      "file": "config.js",
+      "use": "system metadata, demo/prod guard, routes, API base, LIFF"
+    },
+    {
+      "file": "index.html",
+      "use": "public consultation, emergency notice, LINE-link sections"
+    },
+    {
+      "file": "member.html",
+      "use": "member auth boundary, visits, reports, contact request"
+    },
+    {
+      "file": "app.js",
+      "use": "member auth/load behavior, consultation/link/contact mutations"
+    },
+    {
+      "file": "staff.html",
+      "use": "staff login, visit details, internal handoff/report forms"
+    },
+    {
+      "file": "staff.js",
+      "use": "assigned visits, visit start/end mutations, fallback behavior"
+    },
+    {
+      "file": "owner.html",
+      "use": "owner role/menu/panels and mutating controls"
+    },
+    {
+      "file": "owner-ipad.html",
+      "use": "iPad four-tab operational structure"
+    },
+    {
+      "file": "owner-ipad.js",
+      "use": "iPad dynamic cards and mutation controls"
+    },
+    {
+      "file": "styles.css",
+      "use": "responsive/source-level mobile guards"
+    },
+    {
+      "file": "mobile-r2.css",
+      "use": "LINE in-app mobile nav fix"
+    },
+    {
+      "file": "demo-guide.html",
+      "use": "existing demo flow and product-site relationship"
+    },
+    {
+      "file": "release-manifest.json",
+      "use": "verified flows and published URLs"
+    },
+    {
+      "file": "git tree @ source SHA",
+      "use": "complete source inventory"
+    }
+  ]
+}

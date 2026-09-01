@@ -1,0 +1,84 @@
+name: DPRO CHAT B Home Nursing Owner Safety Fix
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: dpro-chat-b-${{ github.repository }}
+  cancel-in-progress: false
+
+jobs:
+  apply:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Repository guard
+        shell: bash
+        run: |
+          if [ "$GITHUB_REPOSITORY" != "dpromstk2000-lab/dpro-home-nursing-line" ]; then
+            echo "Wrong repository: expected dpromstk2000-lab/dpro-home-nursing-line, got $GITHUB_REPOSITORY" >&2
+            exit 1
+          fi
+
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Patch ordinary owner wording and support-only demo setup
+        shell: bash
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          p=Path('owner.html'); s=p.read_text(encoding='utf-8'); before=s
+          replacements=[
+            ('<p class="field__hint">デモ環境の管理コードは1234です。</p>','<p class="field__hint">デモ用の認証情報は <a href="demo-guide.html" target="_blank" rel="noopener">操作ガイド</a> で確認してください。</p>'),
+            ('<p class="eyebrow">Supabase実データ</p>','<p class="eyebrow">最新の運用データ</p>'),
+            ('<p class="eyebrow">今回のSTEP</p>','<p class="eyebrow">ご案内</p>'),
+            ('<h3>固定サンプル表示を廃止しました</h3>','<h3>最新のデータを表示します</h3>'),
+            ('この画面の件数はWorkerを通してSupabaseから取得します。未接続時に架空の患者名や件数は表示しません。','この画面の件数は、接続済みのデータから取得します。未接続時は架空の利用者名や件数を表示しません。'),
+            ('<div class="owner-demo-patient-row section" data-demo-only>','<div class="owner-demo-patient-row section" data-demo-only data-support-only>'),
+          ]
+          for old,new in replacements:
+              if old in s: s=s.replace(old,new)
+              elif new not in s: print('INFO marker already changed/optional:',old[:70])
+          if 'data-support-only' in s and 'dpro-chat-b-support-style' not in s:
+              s=s.replace('</head>',"""<style id="dpro-chat-b-support-style">[data-support-only]:not(.dpro-support-unlocked){display:none!important}</style>\n</head>""",1)
+          if 'data-support-only' in s and 'dpro-chat-b-support-mode' not in s:
+              s=s.replace('</body>',"""<script id="dpro-chat-b-support-mode">(()=>{const q=new URLSearchParams(location.search);if(q.get("support")==="1"&&q.get("demo")==="1"){document.querySelectorAll("[data-support-only]").forEach(el=>el.classList.add("dpro-support-unlocked"));}})();</script>\n</body>""",1)
+          if 'data-dpro-chat-b-guide' not in s:
+              if not Path('demo-guide.html').exists(): raise SystemExit('demo-guide.html missing')
+              s=s.replace('</head>',"""<style id="dpro-chat-b-guide-style">.dpro-chat-b-guide-link{position:fixed;right:12px;bottom:12px;z-index:9999;display:inline-flex;align-items:center;min-height:42px;padding:8px 13px;border:1px solid #cddbd6;border-radius:999px;background:#fff;color:#174b47;text-decoration:none;font-weight:850;box-shadow:0 8px 24px rgba(0,0,0,.12)}@media(max-width:700px){.dpro-chat-b-guide-link{bottom:72px}}</style>\n</head>""",1)
+              s=s.replace('</body>',"""<a class="dpro-chat-b-guide-link" data-dpro-chat-b-guide href="demo-guide.html" target="_blank" rel="noopener">操作ガイド</a>\n</body>""",1)
+          for token in ['Supabase実データ','今回のSTEP','Workerを通してSupabase','デモ環境の管理コードは1234です。']:
+              if token in s: raise SystemExit(f'owner.html ordinary/dev token remains: {token}')
+          for token in ['最新の運用データ','data-support-only','data-dpro-chat-b-guide']:
+              if token not in s: raise SystemExit(f'owner.html expected fix missing: {token}')
+          if s!=before: p.write_text(s,encoding='utf-8')
+          print('HOME NURSING owner safety patch: PASS')
+          PY
+
+      - name: Static owner QA
+        shell: bash
+        run: |
+          grep -q 'data-support-only' owner.html
+          grep -q 'support.*demo' owner.html
+          grep -q 'data-dpro-chat-b-guide' owner.html
+          ! grep -q 'Supabase実データ' owner.html
+          ! grep -q 'Workerを通してSupabase' owner.html
+          echo 'HOME NURSING CHAT B static QA: PASS'
+
+      - name: Commit forward-only fix
+        shell: bash
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git rm --ignore-unmatch ".github/workflows/dpro-chat-b-home-nursing-owner-safety.yml"
+          git add "owner.html"
+          if git diff --cached --quiet; then
+            echo "No changes to commit."
+            exit 0
+          fi
+          git commit -m "Fix CHAT B home nursing owner terminology and support-only demo controls"
+          git push

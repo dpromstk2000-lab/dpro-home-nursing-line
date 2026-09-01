@@ -16,7 +16,9 @@
     <script src="owner.js" defer></script>
     <script src="owner-visits.js" defer></script>
     <script src="owner-reports.js" defer></script>
-  </head>
+  <style id="dpro-chat-b-support-style">[data-support-only]:not(.dpro-support-unlocked){display:none!important}</style>
+<style id="dpro-chat-b-guide-style">.dpro-chat-b-guide-link{position:fixed;right:12px;bottom:12px;z-index:9999;display:inline-flex;align-items:center;min-height:42px;padding:8px 13px;border:1px solid #cddbd6;border-radius:999px;background:#fff;color:#174b47;text-decoration:none;font-weight:850;box-shadow:0 8px 24px rgba(0,0,0,.12)}@media(max-width:700px){.dpro-chat-b-guide-link{bottom:72px}}</style>
+</head>
   <body>
     <a class="skip-link" href="#main">本文へ移動</a>
     <div class="app-shell">
@@ -83,7 +85,7 @@
                 >
                 <button class="btn btn--secondary" type="button" data-owner-clear-code>削除</button>
               </div>
-              <p class="field__hint">デモ環境の管理コードは1234です。</p>
+              <p class="field__hint">デモ用の認証情報は <a href="demo-guide.html" target="_blank" rel="noopener">操作ガイド</a> で確認してください。</p>
             </div>
             <div class="field field--full">
               <button class="btn btn--primary" type="submit" data-owner-login-button>
@@ -120,7 +122,7 @@
               <section class="panel is-active" id="dashboard-panel" data-panel role="tabpanel">
                 <div class="section-heading">
                   <div>
-                    <p class="eyebrow">Supabase実データ</p>
+                    <p class="eyebrow">最新の運用データ</p>
                     <h2>本日の状況</h2>
                   </div>
                   <span class="status status--progress" data-dashboard-badge>取得待ち</span>
@@ -171,10 +173,10 @@
                   </article>
                 </div>
                 <article class="notice-card">
-                  <p class="eyebrow">今回のSTEP</p>
-                  <h3>固定サンプル表示を廃止しました</h3>
+                  <p class="eyebrow">ご案内</p>
+                  <h3>最新のデータを表示します</h3>
                   <p>
-                    この画面の件数はWorkerを通してSupabaseから取得します。未接続時に架空の患者名や件数は表示しません。
+                    この画面の件数は、接続済みのデータから取得します。未接続時は架空の利用者名や件数を表示しません。
                   </p>
                 </article>
               </section>
@@ -195,7 +197,7 @@
                   利用者とスタッフを取得しています。
                 </div>
 
-                <div class="owner-demo-patient-row section" data-demo-only>
+                <div class="owner-demo-patient-row section" data-demo-only data-support-only>
                   <div>
                     <strong>検査用の利用者がない場合</strong>
                     <p>デモ環境に限り、訪問予定の通し検査に使用する利用者を1名準備します。</p>
@@ -586,5 +588,7 @@
       </footer>
     </div>
     <div class="toast" data-toast role="status" aria-live="polite"></div>
-  </body>
+  <script id="dpro-chat-b-support-mode">(()=>{const q=new URLSearchParams(location.search);if(q.get("support")==="1"&&q.get("demo")==="1"){document.querySelectorAll("[data-support-only]").forEach(el=>el.classList.add("dpro-support-unlocked"));}})();</script>
+<a class="dpro-chat-b-guide-link" data-dpro-chat-b-guide href="demo-guide.html" target="_blank" rel="noopener">操作ガイド</a>
+</body>
 </html>
